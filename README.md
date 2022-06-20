@@ -1,2 +1,2 @@
 # Backend-SHA
-Backend de Proyecto de Grado. Sistema de Hipermedia Adaptativa para Programación para Ingenieros
+Backend de Proyecto de Grado. Sistema de Hipermedia Adaptativa para Algoritmos de Programación
