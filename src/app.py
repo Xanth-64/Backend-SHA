@@ -17,12 +17,14 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = (
         environ["ENV_NAME"] == "DEV" or environ["ENV_NAME"] == "STAGING"
     )
+    print(environ.get("DATABASE_URL"))
     app.config["SQLALCHEMY_DATABASE_URI"] = (
-        environ["DATABASE_URL"].replace("postgres", "postgresql")
+        environ["DATABASE_URL"].replace("postgres:", "postgresql:")
         if environ.get("DATABASE_URL")
-        else "postgresql://postgres:peer@localhost:5433"
+        else "postgresql://localhost:5432"
     )
     db = SQLAlchemy(app)
+    db.drop_all()
     db.create_all()
 
     swagger = Swagger(app)

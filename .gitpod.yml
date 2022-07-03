@@ -4,9 +4,9 @@ image:
 tasks:
   - init: |
       poetry install
-      poetry run pre-commit install
 
   - command: |
+      poetry run pre-commit install
       pg_start
       poetry run python wsgi.py -d
 github:
