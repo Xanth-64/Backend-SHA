@@ -3,12 +3,13 @@ image:
 
 tasks:
   - init: |
+      npm install -g dbgate-serve
       poetry install
-      poetry run pre-commit install
 
   - command: |
+      poetry run pre-commit install
+      pg_start
       poetry run python wsgi.py -d
-
 github:
   prebuilds:
     # enable for the default branch (defaults to true)
