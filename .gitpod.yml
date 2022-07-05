@@ -3,6 +3,7 @@ image:
 
 tasks:
   - init: |
+      npm install -g dbgate-serve
       poetry install
 
   - command: |
