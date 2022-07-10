@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Web Server Gateway Interface"""
 
+from os import environ
 from src.app import create_app
 
 # Production Mode
@@ -18,7 +19,7 @@ if __name__ == "__main__":
         "-d", "--debug", action="store_true", default=False, help="debug mode"
     )
     args = parser.parse_args()
-    port = args.port
+    port = environ.get("PORT") if environ.get("PORT") else args.port
     debug = args.debug
     app = create_app()
 
