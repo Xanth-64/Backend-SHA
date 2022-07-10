@@ -30,10 +30,10 @@ def create_app():
 
     # SQLAlchemy Configuration Params
     app.config["SQLALCHEMY_ECHO"] = (
-        environ["ENV_NAME"] == "DEV" or environ["ENV_NAME"] == "STAGING"
+        environ.get("ENV_NAME") == "DEV" or environ.get("ENV_NAME") == "STAGING"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = (
-        environ["ENV_NAME"] == "DEV" or environ["ENV_NAME"] == "STAGING"
+        environ.get("ENV_NAME") == "DEV" or environ.get("ENV_NAME") == "STAGING"
     )
 
     app.config["SQLALCHEMY_DATABASE_URI"] = (
