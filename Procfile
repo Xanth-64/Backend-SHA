@@ -1,1 +1,1 @@
-web: python wsgi.py
+web: uwsgi --ini app.ini --need-app
