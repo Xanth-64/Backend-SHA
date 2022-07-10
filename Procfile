@@ -1,0 +1,1 @@
+web: uwsgi --ini app.ini --need-app
