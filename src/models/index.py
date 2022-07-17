@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Module Containing the Database Models Index
 
 This module groups all of the Model Definitions  for the Backend.
@@ -14,8 +15,9 @@ Typical usage example:
 
     ...
 """
-
+from typing import Dict
 from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.model import Model
 from src.models.answer_alternative import answer_alternative
 from src.models.learning_content import learning_content
 from src.models.page import page
@@ -27,7 +29,8 @@ from src.models.topic import topic
 from src.models.user import user
 
 
-def create_models(db: SQLAlchemy):
+def create_models(db: SQLAlchemy) -> Dict[str, Model]:
+    """Function to Create all of the Models in the database"""
     return {
         "AnswerAlternative": answer_alternative.create_model(db),
         "LearningContent": learning_content.create_model(db),
