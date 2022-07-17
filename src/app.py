@@ -11,8 +11,10 @@ from os import environ
 from flasgger import Swagger
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 from src.models.index import create_models
+from src.schemas.index import create_schemas
 
 
 def create_app():
@@ -42,9 +44,10 @@ def create_app():
         else "postgresql://localhost:5432"
     )
     db = SQLAlchemy(app)
-
+    ma = Marshmallow(app)
     # Database Model Instantiation
     models = create_models(db)
+    schemas = create_schemas(ma=ma, models=models)
     db.drop_all()
     db.create_all()
 

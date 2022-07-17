@@ -22,6 +22,8 @@ from src.models.many_to_many import topic_precedence
 
 
 def create_model(db: SQLAlchemy):
+    secondary_table = topic_precedence.get_helper_table(db)
+
     class Topic(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
         relative_position = db.Column(db.Integer(), nullable=False, unique=True)
@@ -31,9 +33,9 @@ def create_model(db: SQLAlchemy):
         default_knowledge = db.Column(db.Integer(), default=50)
 
         successors = db.relationship(
-            "topic_precedence",
-            secondary=topic_precedence.get_helper_table(db),
-            foreign_keys=['topic_precedence.predecessor'],
+            "Topic",
+            secondary=secondary_table,
+            foreign_keys=[secondary_table.c.predecessor],
             lazy=True,
             backref=db.backref("predecessors", lazy=True),
         )
