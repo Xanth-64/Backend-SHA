@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""""""
+"""Utility Function for Creating Automatic Schemas"""
 from flask_marshmallow import Marshmallow
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
@@ -27,6 +27,8 @@ def create_default_schema(
         """Default Schema For Class"""
 
         class Meta:
+            """Metadata for the Class"""
+
             model = db_model
             include_fk = config_include_fk
             include_relationships = config_include_relationships

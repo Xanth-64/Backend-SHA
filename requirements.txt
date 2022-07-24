@@ -6,6 +6,7 @@ colorama==0.4.5; python_version >= "3.7" and python_full_version < "3.0.0" and p
 distlib==0.3.4; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.7"
 filelock==3.7.1; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.7"
 flasgger==0.9.5
+flask-cors==3.0.10
 flask-marshmallow==0.14.0
 flask-sqlalchemy==2.5.1; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
 flask==2.1.2; python_version >= "3.7"
