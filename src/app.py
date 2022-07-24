@@ -10,11 +10,17 @@ from os import environ
 
 from flasgger import Swagger
 from flask import Flask
+from flask import request
+from flask_cors import CORS
+import traceback
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from werkzeug.exceptions import HTTPException
+import json
 
 from src.models.index import create_models
 from src.schemas.index import create_schemas
+from src.routes.index import create_blueprints
 
 
 def create_app():
@@ -24,7 +30,7 @@ def create_app():
         Flask:Flask Application for Data Fetching & Filtering and Business Logic.
     """
     app = Flask(__name__)
-
+    CORS(app)
     # Swagger Documentation Configuration
     app.config["SWAGGER"] = {
         "title": "Backend de Sistema de Hipermedia Adaptativo Educativo",
@@ -47,14 +53,12 @@ def create_app():
     ma = Marshmallow(app)
     # Database Model Instantiation
     models = create_models(db)
-    schemas = create_schemas(ma=ma, models=models)
+    # HACK This way of creating models is not correct. Change to migrations approach.
     db.drop_all()
     db.create_all()
 
     # API Schema Instantiation
-
-    # API Routes Instantiation
-    # HACK This way of creating models is not correct. Change to migrations approach.
+    schemas = create_schemas(ma=ma, models=models)
 
     # Swagger Docs Initialization
     swagger = Swagger(app)
@@ -62,10 +66,41 @@ def create_app():
     ## Initialize Config
     app.config.from_pyfile("config.py")
 
+    # API Routes Instantiation
+    create_blueprints(db, models, schemas, app)
+
     # Route Configuration
     @app.route("/")
     def hello_world():
         return "<p>Hello, World!</p>"
+
+    @app.errorhandler(HTTPException)
+    def handle_http_exception(e):
+        """Return JSON instead of HTML for HTTP errors."""
+        # start with the correct headers and status code from the error
+        response = e.get_response()
+        # replace the body with JSON
+        response.data = json.dumps(
+            {
+                "code": e.code,
+                "name": e.name,
+                "description": e.description,
+            }
+        )
+        response.content_type = "application/json"
+        return response
+
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        # pass through HTTP errors
+        if isinstance(e, HTTPException):
+            return e
+
+        # now you're handling non-HTTP exceptions only
+        return {
+            "message": "Unexpected HTTP exception Found",
+            "code": traceback.format_exc(),
+        }, 500
 
     db.init_app(app)
     return app
