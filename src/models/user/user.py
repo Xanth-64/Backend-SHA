@@ -23,16 +23,17 @@ from sqlalchemy.dialects.postgresql import UUID
 def create_model(db: SQLAlchemy):
     class User(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-        email = db.Column(db.String(255), nullable=False,unique=True)
+        email = db.Column(db.String(255), nullable=False, unique=True)
         first_name = db.Column(db.String(255), nullable=True)
         last_name = db.Column(db.String(255), nullable=True)
         image_url = db.Column(db.String(255), nullable=True)
 
-        pages = db.relationship(
+        role = db.relationship(
             "Role",
             backref="user",
             lazy=True,
             uselist=True,
             cascade="all, delete-orphan",
         )
+
     return User

@@ -20,6 +20,7 @@ psycopg2 = "^2.9.3"
 marshmallow-sqlalchemy = "^0.28.0"
 pre-commit = "^2.19.0"
 Flask-Cors = "^3.0.10"
+firebase-admin = "^5.2.0"
 
 [tool.poetry.dev-dependencies]
 watchdog = "^2.1.9"
