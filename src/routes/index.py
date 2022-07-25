@@ -19,6 +19,7 @@ from flask_sqlalchemy import SQLAlchemy
 from src.routes.answer_alternative.answer_alternative_blueprint import (
     create_answer_alternative_blueprint,
 )
+from src.routes.auth.auth_blueprint import create_auth_blueprint
 from src.routes.learning_content.learning_content_blueprint import (
     create_learning_content_blueprint,
 )
@@ -49,6 +50,7 @@ def create_blueprints(db: SQLAlchemy, models, schemas, app: Flask) -> None:
     app.register_blueprint(
         blueprint=create_answer_alternative_blueprint(db, models, schemas)
     )
+    app.register_blueprint(blueprint=create_auth_blueprint(db, models, schemas))
     app.register_blueprint(
         blueprint=create_learning_content_blueprint(db, models, schemas)
     )

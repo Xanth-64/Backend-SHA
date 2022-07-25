@@ -6,21 +6,20 @@ for Data Fetching & Filtering, Also includes the logic required
 for Bayesian Network representation of data.
 
 """
+import json
+import traceback
 from os import environ
 
 from flasgger import Swagger
 from flask import Flask
-from flask import request
 from flask_cors import CORS
-import traceback
-from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
-import json
 
 from src.models.index import create_models
-from src.schemas.index import create_schemas
 from src.routes.index import create_blueprints
+from src.schemas.index import create_schemas
 
 
 def create_app():
@@ -74,6 +73,14 @@ def create_app():
     def hello_world():
         return "<p>Hello, World!</p>"
 
+    # @app.errorhandler(500)
+    # def handle_runtime_exception(e):
+    #     return {
+    #         "message": "Unexpected Runtime Exception Found",
+    #         "name": str(e),
+    #         "code": traceback.format_exc(),
+    #     }, 500
+
     @app.errorhandler(HTTPException)
     def handle_http_exception(e):
         """Return JSON instead of HTML for HTTP errors."""
@@ -98,8 +105,9 @@ def create_app():
 
         # now you're handling non-HTTP exceptions only
         return {
-            "message": "Unexpected HTTP exception Found",
-            "code": traceback.format_exc(),
+            "success": False,
+            "code": {"name": str(e), "traceback": traceback.format_exc()},
+            "message": "Unexpected Runtime exception Found",
         }, 500
 
     db.init_app(app)

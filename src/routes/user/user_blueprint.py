@@ -32,10 +32,7 @@ def create_user_blueprint(db: SQLAlchemy, models, schemas) -> Blueprint:
     """
     blueprint = Blueprint(name="/users", import_name=__name__, url_prefix="/users")
 
-    create_one_controller_factory(
-        db, models["User"], schemas["User_DefaultSchema"], blueprint
-    )
-    # get_all_controller_factory(models["User"], schemas["User_DefaultSchema"], blueprint)
+    get_all_controller_factory(models["User"], schemas["User_DefaultSchema"], blueprint)
     get_by_id_controller_factory(
         models["User"], schemas["User_DefaultSchema"], blueprint
     )

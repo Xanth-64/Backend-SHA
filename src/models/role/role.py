@@ -24,7 +24,7 @@ from sqlalchemy.dialects.postgresql import ENUM, UUID
 def create_model(db: SQLAlchemy):
     class Role(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-        question_type = db.Column(
+        role_name = db.Column(
             ENUM("student", "teacher", name="acc_role_enum"),
             default="student",
         )
