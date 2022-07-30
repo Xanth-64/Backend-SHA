@@ -30,11 +30,14 @@ def create_app():
     """
     app = Flask(__name__)
     CORS(app)
+    ## Initialize Config
+    app.config.from_pyfile("config.py")
+
     # Swagger Documentation Configuration
     app.config["SWAGGER"] = {
         "title": "Backend de Sistema de Hipermedia Adaptativo Educativo",
     }
-
+    print("Database URL",environ.get("DATABASE_URL"))
     # SQLAlchemy Configuration Params
     app.config["SQLALCHEMY_ECHO"] = (
         environ.get("ENV_NAME") == "DEV" or environ.get("ENV_NAME") == "STAGING"
@@ -61,9 +64,6 @@ def create_app():
 
     # Swagger Docs Initialization
     swagger = Swagger(app)
-
-    ## Initialize Config
-    app.config.from_pyfile("config.py")
 
     # API Routes Instantiation
     create_blueprints(db, models, schemas, app)
