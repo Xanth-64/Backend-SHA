@@ -3,13 +3,9 @@
 
 from os import environ
 
-import firebase_admin
-
 from src.app import create_app
 
 # Production Mode
-# Firebase Admin Configuration
-firebase_admin.initialize_app()
 app = create_app()
 
 if __name__ == "__main__":
