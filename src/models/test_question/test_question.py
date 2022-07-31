@@ -32,13 +32,17 @@ def create_model(db: SQLAlchemy):
         )
         question_prompt = db.Column(db.Text(), nullable=False)
         relative_position = db.Column(db.Integer(), nullable=False)
-        question_score = db.Column(db.Integer(),default=1)
+        question_score = db.Column(db.Integer(), default=1)
         practice_test_id = db.Column(
             UUID(as_uuid=True), db.ForeignKey("practice_test.id"), nullable=False
         )
 
         answer_alternatives = db.relationship(
-            "AnswerAlternative", backref="test_question", lazy=True, uselist=True, cascade="all, delete-orphan"
+            "AnswerAlternative",
+            backref="test_question",
+            lazy=True,
+            uselist=True,
+            cascade="all, delete-orphan",
         )
 
         UniqueConstraint(

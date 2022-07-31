@@ -47,4 +47,5 @@ def create_model(db: SQLAlchemy):
         )
 
         UniqueConstraint(relative_position, topic_id, name="unique_template_position")
+
     return Template

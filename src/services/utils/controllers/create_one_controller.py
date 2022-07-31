@@ -40,7 +40,7 @@ def create_one_controller_factory(
     @auth_middleware(
         expected_role=expected_role, firebase_app=firebase_app, user_model=user_model
     )
-    def create_one_controller(current_user = None):
+    def create_one_controller(current_user=None):
         """Controller function to Create an Instance of a given Model.
 
         Returns:

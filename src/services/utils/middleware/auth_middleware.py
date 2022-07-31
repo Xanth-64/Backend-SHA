@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Auth Middleware to discrimnitate between student and teacher"""
 
 from functools import wraps
