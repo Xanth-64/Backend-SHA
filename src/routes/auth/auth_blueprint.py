@@ -8,6 +8,7 @@ Returns:
 from os import environ
 
 import requests
+from firebase_admin import App
 from firebase_admin._auth_utils import EmailAlreadyExistsError
 from firebase_admin.auth import create_user
 from flask import Blueprint, request
@@ -15,14 +16,16 @@ from flask_sqlalchemy import SQLAlchemy
 from marshmallow import EXCLUDE
 
 
-def create_auth_blueprint(db: SQLAlchemy, models: dict, schemas: dict) -> Blueprint:
+def create_auth_blueprint(
+    db: SQLAlchemy, models: dict, schemas: dict, firebase_app: App
+) -> Blueprint:
     """Function to Create the User Auth Blueprint
 
     Args:
         db (SQLAlchemy): Database Singleton Object Containing all of the Connection Params.
         models (dict): Model Dictionary.
         schemas (dict): Schema Dictionary.
-
+        firebase_app (App) : Firebase App Instance.
     Returns:
         Blueprint: Blueprint for the Authentication.
     """
@@ -43,13 +46,14 @@ def create_auth_blueprint(db: SQLAlchemy, models: dict, schemas: dict) -> Bluepr
                     else "student"
                 )
             )
-            create_user(
-                uid=new_instance.id,
-                email=req_data["email"],
-                password=req_data["password"],
-            )
             db.session.add(new_instance)
             db.session.commit()
+            create_user(
+                uid=str(new_instance.id),
+                email=req_data["email"],
+                password=req_data["password"],
+                app=firebase_app,
+            )
             token = requests.post(
                 f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={environ.get('GOOGLE_API_KEY')}",
                 data={

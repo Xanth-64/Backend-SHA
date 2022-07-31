@@ -8,8 +8,9 @@ for Bayesian Network representation of data.
 """
 import json
 import traceback
-from os import environ
+from os import environ, getpid
 
+import firebase_admin
 from flasgger import Swagger
 from flask import Flask
 from flask_cors import CORS
@@ -33,6 +34,14 @@ def create_app():
     ## Initialize Config
     app.config.from_pyfile("config.py")
 
+    # Firebase Admin Configuration
+    try:
+        print("INITIALIZING APP")
+        firebase_app = firebase_admin.initialize_app(name=f"firebase-admin {getpid()}")
+        print("APP STARTED")
+    except ValueError:
+        print("Duplicate Process Detected")
+        firebase_app = firebase_admin.get_app(name=f"firebase-admin {getpid()}")
     # Swagger Documentation Configuration
     app.config["SWAGGER"] = {
         "title": "Backend de Sistema de Hipermedia Adaptativo Educativo",
@@ -62,11 +71,13 @@ def create_app():
     # API Schema Instantiation
     schemas = create_schemas(ma=ma, models=models)
 
+    # API Middleware Instantiation
+
     # Swagger Docs Initialization
     swagger = Swagger(app)
 
     # API Routes Instantiation
-    create_blueprints(db, models, schemas, app)
+    create_blueprints(db, models, schemas, app, firebase_app)
 
     # Route Configuration
     @app.route("/")

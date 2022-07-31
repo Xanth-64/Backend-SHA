@@ -5,6 +5,7 @@ for Learning Content Models
 Returns:
     function: Function for instantiating the Learning Content Blueprint.
 """
+from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from src.services.utils.controllers.create_one_controller import (
@@ -20,7 +21,7 @@ from src.services.utils.controllers.update_by_id_controller import (
 
 
 def create_learning_content_blueprint(
-    db: SQLAlchemy, models: dict, schemas: dict
+    db: SQLAlchemy, models: dict, schemas: dict, firebase_app: App
 ) -> Blueprint:
     """Function to Create the Learning Content Blueprint
 
@@ -28,7 +29,7 @@ def create_learning_content_blueprint(
         db (SQLAlchemy): Database Singleton Object Containing all of the Connection Params.
         models (dict): Model Dictionary.
         schemas (dict): Schema Dictionary.
-
+        firebase_app (App) : Firebase App Instance.
     Returns:
         Blueprint: Blueprint for the Learning Content Class.
     """
@@ -41,21 +42,33 @@ def create_learning_content_blueprint(
         models["LearningContent"],
         schemas["LearningContent_DefaultSchema"],
         blueprint,
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
     )
     get_all_controller_factory(
         models["LearningContent"],
         schemas["LearningContent_DefaultSchema"],
         blueprint,
+        expected_role="student",
+        firebase_app=firebase_app,
+        user_model=models["User"],
     )
     get_by_id_controller_factory(
         models["LearningContent"],
         schemas["LearningContent_DefaultSchema"],
         blueprint,
+        expected_role="student",
+        firebase_app=firebase_app,
+        user_model=models["User"],
     )
     update_by_id_controller_factory(
         db,
         models["LearningContent"],
         schemas["LearningContent_DefaultSchema"],
         blueprint,
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
     )
     return blueprint
