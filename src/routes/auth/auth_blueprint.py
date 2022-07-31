@@ -14,6 +14,7 @@ from firebase_admin.auth import create_user
 from flask import Blueprint, request
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow import EXCLUDE
+from sqlalchemy.exc import IntegrityError
 
 
 def create_auth_blueprint(
@@ -46,8 +47,18 @@ def create_auth_blueprint(
                     else "student"
                 )
             )
-            db.session.add(new_instance)
-            db.session.commit()
+            try:
+                db.session.add(new_instance)
+                db.session.commit()
+            except IntegrityError:
+                return {
+                    "success": False,
+                    "data": {
+                        "error": "EMAIL_ALREADY_EXISTS",
+                        "message": "User Account Already Exists",
+                    },
+                    "message": "User Account Already Exists",
+                }, 403
             create_user(
                 uid=str(new_instance.id),
                 email=req_data["email"],

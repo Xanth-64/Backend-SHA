@@ -21,6 +21,7 @@ from src.routes.answer_alternative.answer_alternative_blueprint import (
     create_answer_alternative_blueprint,
 )
 from src.routes.auth.auth_blueprint import create_auth_blueprint
+from src.routes.current_user.current_user_blueprint import create_current_user_blueprint
 from src.routes.learning_content.learning_content_blueprint import (
     create_learning_content_blueprint,
 )
@@ -54,6 +55,9 @@ def create_blueprints(
     )
     app.register_blueprint(
         blueprint=create_auth_blueprint(db, models, schemas, firebase_app)
+    )
+    app.register_blueprint(
+        blueprint=create_current_user_blueprint(db, models, schemas, firebase_app)
     )
     app.register_blueprint(
         blueprint=create_learning_content_blueprint(db, models, schemas, firebase_app)

@@ -46,7 +46,7 @@ def create_app():
     app.config["SWAGGER"] = {
         "title": "Backend de Sistema de Hipermedia Adaptativo Educativo",
     }
-    print("Database URL",environ.get("DATABASE_URL"))
+    print("Database URL", environ.get("DATABASE_URL"))
     # SQLAlchemy Configuration Params
     app.config["SQLALCHEMY_ECHO"] = (
         environ.get("ENV_NAME") == "DEV" or environ.get("ENV_NAME") == "STAGING"
