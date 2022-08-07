@@ -36,17 +36,13 @@ def create_app():
 
     # Firebase Admin Configuration
     try:
-        print("INITIALIZING APP")
         firebase_app = firebase_admin.initialize_app(name=f"firebase-admin {getpid()}")
-        print("APP STARTED")
     except ValueError:
-        print("Duplicate Process Detected")
         firebase_app = firebase_admin.get_app(name=f"firebase-admin {getpid()}")
     # Swagger Documentation Configuration
     app.config["SWAGGER"] = {
         "title": "Backend de Sistema de Hipermedia Adaptativo Educativo",
     }
-    print("Database URL", environ.get("DATABASE_URL"))
     # SQLAlchemy Configuration Params
     app.config["SQLALCHEMY_ECHO"] = (
         environ.get("ENV_NAME") == "DEV" or environ.get("ENV_NAME") == "STAGING"
@@ -81,8 +77,8 @@ def create_app():
 
     # Route Configuration
     @app.route("/")
-    def hello_world():
-        return "<p>Hello, World!</p>"
+    def check_health():
+        return {"sucess": True, "message": "SHA-API Online."}, 200
 
     # @app.errorhandler(500)
     # def handle_runtime_exception(e):
