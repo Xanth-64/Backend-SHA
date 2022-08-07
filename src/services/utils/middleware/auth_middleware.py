@@ -12,6 +12,8 @@ from firebase_admin.auth import (
 )
 from flask import request
 from flask_sqlalchemy import Model
+from google.oauth2.id_token import verify_firebase_token
+from google.auth.transport.requests import Request
 
 
 def auth_middleware(
@@ -50,8 +52,9 @@ def auth_middleware(
                         "message": "Unauthorized",
                     }, 401
                 try:
-                    decoded_token = verify_id_token(
-                        id_token=token, check_revoked=True, app=firebase_app
+                    requests = Request()
+                    decoded_token = verify_firebase_token(
+                        id_token=token, request=requests, clock_skew_in_seconds=60
                     )
                 except ValueError:
                     return {
@@ -59,7 +62,11 @@ def auth_middleware(
                         "code": {"name": "BAD_AUTH_HEADER"},
                         "message": "Unauthorized",
                     }, 401
-                except (InvalidIdTokenError, ExpiredIdTokenError, RevokedIdTokenError):
+                except (
+                    InvalidIdTokenError,
+                    ExpiredIdTokenError,
+                    RevokedIdTokenError,
+                ):
                     return {
                         "success": False,
                         "code": {"name": "INVALID_AUTH_HEADER"},
