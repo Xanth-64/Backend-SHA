@@ -18,6 +18,9 @@ from src.services.utils.controllers.get_by_id_controller import (
 from src.services.utils.controllers.update_by_id_controller import (
     update_by_id_controller_factory,
 )
+from src.services.utils.controllers.get_all_with_pagination_controller import (
+    get_all_with_pagination_controller_factory,
+)
 
 
 def create_practice_test_blueprint(
@@ -69,6 +72,14 @@ def create_practice_test_blueprint(
         schemas["PracticeTest_DefaultSchema"],
         blueprint,
         expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    get_all_with_pagination_controller_factory(
+        models["PracticeTest"],
+        schemas["PracticeTest_DefaultSchema"],
+        blueprint,
+        expected_role="student",
         firebase_app=firebase_app,
         user_model=models["User"],
     )

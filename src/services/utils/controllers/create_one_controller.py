@@ -9,6 +9,7 @@ from flask import Blueprint, request
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import Model
+from sqlalchemy.exc import IntegrityError
 from src.services.utils.middleware.auth_middleware import auth_middleware
 
 
@@ -48,8 +49,18 @@ def create_one_controller_factory(
         """
         req_data = request.get_json()
         new_instance = model(**req_data)
-        db.session.add(new_instance)
-        db.session.commit()
+        try:
+            db.session.add(new_instance)
+            db.session.commit()
+        except IntegrityError:
+            return {
+                "success": False,
+                "data": {
+                    "error": "UNIQUE_VIOLATION",
+                    "message": "Database Constraint Violation",
+                },
+                "message": "Database Integrity Error",
+            }, 400
         return {
             "success": True,
             "message": "Model Data Created Successfully",

@@ -9,6 +9,9 @@ from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from src.services.utils.controllers.get_all_controller import get_all_controller_factory
+from src.services.utils.controllers.get_all_with_pagination_controller import (
+    get_all_with_pagination_controller_factory,
+)
 from src.services.utils.controllers.get_by_id_controller import (
     get_by_id_controller_factory,
 )
@@ -51,6 +54,14 @@ def create_user_blueprint(
     )
     update_by_id_controller_factory(
         db,
+        models["User"],
+        schemas["User_DefaultSchema"],
+        blueprint,
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    get_all_with_pagination_controller_factory(
         models["User"],
         schemas["User_DefaultSchema"],
         blueprint,
