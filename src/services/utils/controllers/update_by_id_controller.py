@@ -9,6 +9,7 @@ from flask import Blueprint, request
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import Model
+from sqlalchemy.exc import IntegrityError
 from src.services.utils.middleware.auth_middleware import auth_middleware
 
 
@@ -59,7 +60,18 @@ def update_by_id_controller_factory(
         new_data = request.json
         for key in new_data:
             setattr(data, key, new_data[key])
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            return {
+                "success": False,
+                "data": {
+                    "error": "UNIQUE_VIOLATION",
+                    "message": "Database Constraint Violation",
+                },
+                "message": "Database Integrity Error",
+            }, 400
+
         return {
             "success": True,
             "message": "Model Data Updated Successfully",
