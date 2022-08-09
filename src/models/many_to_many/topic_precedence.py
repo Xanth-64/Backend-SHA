@@ -15,6 +15,7 @@ Typical usage example:
         secondary=topic_precedence.get_helper_table(db),
         lazy=True,backref=db.backref('relationship_backname', lazy=True))
 """
+from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table
@@ -36,4 +37,5 @@ def get_helper_table(db: SQLAlchemy) -> Table:
             db.ForeignKey("topic.id"),
             primary_key=True,
         ),
+        db.Column("created_at", db.DateTime, nullable=False, default=datetime.utcnow),
     )

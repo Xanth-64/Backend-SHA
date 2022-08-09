@@ -15,6 +15,7 @@ Typical usage example:
 """
 
 import uuid
+from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
@@ -23,6 +24,7 @@ from sqlalchemy.dialects.postgresql import UUID
 def create_model(db: SQLAlchemy):
     class User(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+        created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
         email = db.Column(db.String(255), nullable=False, unique=True)
         first_name = db.Column(db.String(255), nullable=True)
         last_name = db.Column(db.String(255), nullable=True)

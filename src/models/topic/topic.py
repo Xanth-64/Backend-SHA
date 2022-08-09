@@ -14,10 +14,10 @@ Typical usage example:
     }
 """
 import uuid
+from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
-
 from src.models.many_to_many import topic_precedence
 
 
@@ -26,6 +26,7 @@ def create_model(db: SQLAlchemy):
 
     class Topic(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+        created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
         relative_position = db.Column(db.Integer(), nullable=False, unique=True)
 
         title = db.Column(db.String(255), unique=True, nullable=False)

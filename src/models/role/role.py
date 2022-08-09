@@ -16,6 +16,7 @@ Typical usage example:
 """
 
 import uuid
+from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import ENUM, UUID
@@ -24,6 +25,8 @@ from sqlalchemy.dialects.postgresql import ENUM, UUID
 def create_model(db: SQLAlchemy):
     class Role(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+        created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
         role_name = db.Column(
             ENUM("student", "teacher", name="acc_role_enum"),
             default="student",

@@ -14,6 +14,7 @@ Typical usage example:
     }
 """
 import uuid
+from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
@@ -23,6 +24,8 @@ from sqlalchemy.dialects.postgresql import UUID
 def create_model(db: SQLAlchemy):
     class Page(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+        created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
         relative_position = db.Column(db.Integer(), nullable=False)
 
         template_id = db.Column(
