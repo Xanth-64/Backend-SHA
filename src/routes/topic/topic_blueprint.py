@@ -8,15 +8,15 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from src.services.utils.controllers.create_one_controller import (
-    create_one_controller_factory,
-)
 from src.services.utils.controllers.get_all_controller import get_all_controller_factory
 from src.services.utils.controllers.get_all_with_pagination_controller import (
     get_all_with_pagination_controller_factory,
 )
 from src.services.utils.controllers.get_by_id_controller import (
     get_by_id_controller_factory,
+)
+from src.services.utils.controllers.topic.create_one_topic import (
+    create_one_topic_controller_factory,
 )
 from src.services.utils.controllers.update_by_id_controller import (
     update_by_id_controller_factory,
@@ -38,8 +38,7 @@ def create_topic_blueprint(
         Blueprint: Blueprint for the Topic Class.
     """
     blueprint = Blueprint(name="/topics", import_name=__name__, url_prefix="/topics")
-
-    create_one_controller_factory(
+    create_one_topic_controller_factory(
         db,
         models["Topic"],
         schemas["Topic_DefaultSchema"],
