@@ -40,9 +40,18 @@ def get_all_with_pagination_controller_factory(
     )
     def get_all_with_pagination_controller(current_user=None):
         args = request.args
-        data = model().query.paginate(
-            page=int(args.get("page")), per_page=int(args.get("page_size"))
-        )
+        if args.get("sort_key"):
+            data = (
+                model()
+                .query.order_by(args.get("sort_key"))
+                .paginate(
+                    page=int(args.get("page")), per_page=int(args.get("page_size"))
+                )
+            )
+        else:
+            data = model().query.paginate(
+                page=int(args.get("page")), per_page=int(args.get("page_size"))
+            )
         return {
             "message": "Model Bulk Data Found Successfully",
             "data": {

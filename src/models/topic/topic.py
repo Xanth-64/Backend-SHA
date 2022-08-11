@@ -27,7 +27,8 @@ def create_model(db: SQLAlchemy):
     class Topic(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
         created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-        relative_position = db.Column(db.Integer(), nullable=False, unique=True)
+        relative_position = db.Column(db.Integer(), nullable=False)
+        db.UniqueConstraint(relative_position, deferrable=True, initially="DEFERRED")
 
         title = db.Column(db.String(255), unique=True, nullable=False)
         icon_name = db.Column(db.String(255), nullable=True)
