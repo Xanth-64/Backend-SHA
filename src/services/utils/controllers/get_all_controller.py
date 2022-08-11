@@ -5,7 +5,7 @@ Returns:
     function: Read Function for the Specific Model & Schema
 """
 from firebase_admin import App
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
 from src.services.utils.middleware.auth_middleware import auth_middleware
@@ -39,7 +39,11 @@ def get_all_controller_factory(
         expected_role=expected_role, firebase_app=firebase_app, user_model=user_model
     )
     def get_all_controller(current_user=None):
-        data = model().query.all()
+        args = request.args
+        if args.get("sort_key"):
+            data = model().query.order_by(args.get("sort_key")).all()
+        else:
+            data = model().query.all()
         return {
             "message": "Model Bulk Data Found Successfully",
             "data": schema().dump(obj=data, many=True),
