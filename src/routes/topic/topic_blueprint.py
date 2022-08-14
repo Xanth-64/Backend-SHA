@@ -24,6 +24,12 @@ from src.services.utils.controllers.update_by_id_controller import (
 from src.services.utils.controllers.topic.switch_topics import (
     switch_topic_controller_factory,
 )
+from src.services.utils.controllers.topic.create_topic_prelations import (
+    create_topic_prelations_controller_factory,
+)
+from src.services.utils.controllers.topic.get_all_topic_prelations import (
+    get_all_topic_prelations_controller_factory,
+)
 
 
 def create_topic_blueprint(
@@ -92,4 +98,23 @@ def create_topic_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
+    get_all_topic_prelations_controller_factory(
+        db,
+        models["TopicPrecedence"],
+        schemas["Topic_TopicPrecedenceSchema"],
+        blueprint,
+        expected_role="student",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    create_topic_prelations_controller_factory(
+        db,
+        models,
+        schemas["Topic_DefaultSchema"],
+        blueprint,
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+
     return blueprint
