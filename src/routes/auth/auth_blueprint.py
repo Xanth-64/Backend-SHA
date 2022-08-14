@@ -15,6 +15,7 @@ from flask import Blueprint, request
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow import EXCLUDE
 from sqlalchemy.exc import IntegrityError
+from src.services.utils.middleware.auth_middleware import auth_middleware
 
 
 def create_auth_blueprint(
@@ -116,6 +117,43 @@ def create_auth_blueprint(
             "success": True,
             "data": token.json(),
             "message": "User Account Retrieved Successfully",
+        }, 200
+
+    @blueprint.route("/change_password", methods=["PATCH", "PUT"])
+    @auth_middleware(
+        expected_role="student", firebase_app=firebase_app, user_model=models["User"]
+    )
+    def change_password(current_user=None):
+        req_data = request.get_json()
+        token = requests.post(
+            f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={environ.get('GOOGLE_API_KEY')}",
+            data={
+                "email": current_user.email,
+                "password": req_data.get("old_password"),
+                "returnSecureToken": True,
+            },
+        )
+        if token.status_code == 400:
+            return {
+                "success": False,
+                "data": {
+                    "error": "INVALID_PASSWORD",
+                    "message": "Wrong Password",
+                },
+                "message": "Wrong Password",
+            }
+        token = requests.post(
+            f"https://identitytoolkit.googleapis.com/v1/accounts:update?key={environ.get('GOOGLE_API_KEY')}",
+            data={
+                "idToken": token.json().get("idToken"),
+                "password": req_data.get("new_password"),
+                "returnSecureToken": True,
+            },
+        )
+        return {
+            "success": True,
+            "data": token.json(),
+            "message": "Password Changed Successfully",
         }, 200
 
     return blueprint
