@@ -8,18 +8,20 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from src.services.utils.controllers.create_one_controller import (
-    create_one_controller_factory,
-)
-from src.services.utils.controllers.get_all_controller import get_all_controller_factory
-from src.services.utils.controllers.get_all_with_pagination_controller import (
-    get_all_with_pagination_controller_factory,
+from src.services.utils.controllers.template.get_templates_for_topic import (
+    get_templates_for_topic_factory,
 )
 from src.services.utils.controllers.get_by_id_controller import (
     get_by_id_controller_factory,
 )
 from src.services.utils.controllers.update_by_id_controller import (
     update_by_id_controller_factory,
+)
+from src.services.utils.controllers.template.create_one_template import (
+    create_one_template_controller_factory,
+)
+from src.services.utils.controllers.template.switch_templates import (
+    switch_template_controller_factory,
 )
 
 
@@ -41,7 +43,7 @@ def create_template_blueprint(
         name="/templates", import_name=__name__, url_prefix="/templates"
     )
 
-    create_one_controller_factory(
+    create_one_template_controller_factory(
         db,
         models["Template"],
         schemas["Template_DefaultSchema"],
@@ -50,7 +52,7 @@ def create_template_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
-    get_all_controller_factory(
+    get_templates_for_topic_factory(
         models["Template"],
         schemas["Template_DefaultSchema"],
         blueprint,
@@ -66,7 +68,7 @@ def create_template_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
-    update_by_id_controller_factory(
+    switch_template_controller_factory(
         db,
         models["Template"],
         schemas["Template_DefaultSchema"],
@@ -75,11 +77,12 @@ def create_template_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
-    get_all_with_pagination_controller_factory(
+    update_by_id_controller_factory(
+        db,
         models["Template"],
         schemas["Template_DefaultSchema"],
         blueprint,
-        expected_role="student",
+        expected_role="teacher",
         firebase_app=firebase_app,
         user_model=models["User"],
     )
