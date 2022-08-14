@@ -49,6 +49,12 @@ def create_model(db: SQLAlchemy):
             cascade="all, delete-orphan",
         )
 
-        UniqueConstraint(relative_position, topic_id, name="unique_template_position")
+        UniqueConstraint(
+            relative_position,
+            topic_id,
+            name="unique_template_position",
+            deferrable=True,
+            initially="DEFERRED",
+        )
 
     return Template
