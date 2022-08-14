@@ -16,6 +16,9 @@ from flask_sqlalchemy import SQLAlchemy
 from marshmallow import EXCLUDE
 from sqlalchemy.exc import IntegrityError
 from src.services.utils.middleware.auth_middleware import auth_middleware
+from src.services.utils.controllers.auth.update_current_user import (
+    update_current_user_controller_factory,
+)
 
 
 def create_auth_blueprint(
@@ -156,4 +159,13 @@ def create_auth_blueprint(
             "message": "Password Changed Successfully",
         }, 200
 
+    update_current_user_controller_factory(
+        db,
+        models["User"],
+        schemas["User_DefaultSchema"],
+        blueprint,
+        "student",
+        firebase_app,
+        models["User"],
+    )
     return blueprint
