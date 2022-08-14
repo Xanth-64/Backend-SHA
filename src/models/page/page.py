@@ -47,7 +47,12 @@ def create_model(db: SQLAlchemy):
             uselist=False,
             cascade="all, delete-orphan",
         )
-
-        UniqueConstraint(relative_position, template_id, name="unique_page_position")
+        UniqueConstraint(
+            relative_position,
+            template_id,
+            name="unique_page_position",
+            deferrable=True,
+            initially="DEFERRED",
+        )
 
     return Page

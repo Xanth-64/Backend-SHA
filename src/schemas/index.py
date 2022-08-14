@@ -9,6 +9,7 @@ from typing import Dict
 from flask_marshmallow import Marshmallow
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
+from .page.page import create_page_inheritance_schema
 from src.services.utils.schemas.create_default_schema import create_default_schema
 from src.schemas.user.user import create_current_user_schema
 from src.schemas.topic.topic import create_topic_precedence_schema
@@ -30,4 +31,7 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
         ma=ma, db_model=models["User"]
     )
     schemas["Topic_TopicPrecedenceSchema"] = create_topic_precedence_schema()
+    schemas["Page_PageInheritanceSchema"] = create_page_inheritance_schema(
+        ma, schemas, models
+    )
     return schemas

@@ -8,15 +8,20 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from src.services.utils.controllers.create_one_controller import (
-    create_one_controller_factory,
+from src.services.utils.controllers.page.create_one_page import (
+    create_one_page_controller_factory,
 )
-from src.services.utils.controllers.get_all_controller import get_all_controller_factory
+from src.services.utils.controllers.page.get_pages_for_template import (
+    get_pages_for_template_factory,
+)
 from src.services.utils.controllers.get_by_id_controller import (
     get_by_id_controller_factory,
 )
 from src.services.utils.controllers.update_by_id_controller import (
     update_by_id_controller_factory,
+)
+from src.services.utils.controllers.page.switch_pages import (
+    switch_page_controller_factory,
 )
 
 
@@ -36,18 +41,18 @@ def create_page_blueprint(
     """
     blueprint = Blueprint(name="/pages", import_name=__name__, url_prefix="/pages")
 
-    create_one_controller_factory(
+    create_one_page_controller_factory(
         db,
-        models["Page"],
-        schemas["Page_DefaultSchema"],
+        models,
+        schemas["Page_PageInheritanceSchema"],
         blueprint,
         expected_role="teacher",
         firebase_app=firebase_app,
         user_model=models["User"],
     )
-    get_all_controller_factory(
+    get_pages_for_template_factory(
         models["Page"],
-        schemas["Page_DefaultSchema"],
+        schemas["Page_PageInheritanceSchema"],
         blueprint,
         expected_role="student",
         firebase_app=firebase_app,
@@ -55,7 +60,7 @@ def create_page_blueprint(
     )
     get_by_id_controller_factory(
         models["Page"],
-        schemas["Page_DefaultSchema"],
+        schemas["Page_PageInheritanceSchema"],
         blueprint,
         expected_role="student",
         firebase_app=firebase_app,
@@ -64,7 +69,16 @@ def create_page_blueprint(
     update_by_id_controller_factory(
         db,
         models["Page"],
-        schemas["Page_DefaultSchema"],
+        schemas["Page_PageInheritanceSchema"],
+        blueprint,
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    switch_page_controller_factory(
+        db,
+        models["Page"],
+        schemas["Page_PageInheritanceSchema"],
         blueprint,
         expected_role="teacher",
         firebase_app=firebase_app,
