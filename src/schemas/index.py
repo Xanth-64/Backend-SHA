@@ -11,6 +11,7 @@ from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
 from src.services.utils.schemas.create_default_schema import create_default_schema
 from src.schemas.user.user import create_current_user_schema
+from src.schemas.topic.topic import create_topic_precedence_schema
 
 
 def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schema]:
@@ -18,13 +19,15 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
     schemas = {}
     # NOTE Creation of the Default Schemas (Containing all of the Properties in the Model)
     for model_name, model in models.items():
-        schemas[f"{model_name}_DefaultSchema"] = create_default_schema(
-            ma=ma,
-            db_model=model,
-            config_include_fk=False,
-            config_include_relationships=False,
-        )
+        if model_name not in ("TopicPrecedence",):
+            schemas[f"{model_name}_DefaultSchema"] = create_default_schema(
+                ma=ma,
+                db_model=model,
+                config_include_fk=False,
+                config_include_relationships=False,
+            )
     schemas["User_CurrentUserSchema"] = create_current_user_schema(
         ma=ma, db_model=models["User"]
     )
+    schemas["Topic_TopicPrecedenceSchema"] = create_topic_precedence_schema()
     return schemas

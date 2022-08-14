@@ -7,7 +7,7 @@ readme =  "README.md"
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "3.8"
 Flask = "^2.1.2"
 python-dotenv = "^0.20.0"
 uWSGI = "^2.0.20"
@@ -21,6 +21,7 @@ marshmallow-sqlalchemy = "^0.28.0"
 pre-commit = "^2.19.0"
 Flask-Cors = "^3.0.10"
 firebase-admin = "^5.2.0"
+Python-EasyGraph = "^0.2a39"
 
 [tool.poetry.dev-dependencies]
 watchdog = "^2.1.9"

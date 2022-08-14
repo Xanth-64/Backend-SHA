@@ -15,6 +15,7 @@ Typical usage example:
 
     ...
 """
+from pyexpat import model
 from typing import Dict
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import Model
@@ -31,7 +32,7 @@ from src.models.user import user
 
 def create_models(db: SQLAlchemy) -> Dict[str, Model]:
     """Function to Create all of the Models in the database"""
-    return {
+    model_dict = {
         "AnswerAlternative": answer_alternative.create_model(db),
         "LearningContent": learning_content.create_model(db),
         "Page": page.create_model(db),
@@ -39,6 +40,9 @@ def create_models(db: SQLAlchemy) -> Dict[str, Model]:
         "Role": role.create_model(db),
         "Template": template.create_model(db),
         "TestQuestion": test_question.create_model(db),
-        "Topic": topic.create_model(db),
         "User": user.create_model(db),
     }
+    Topic, TopicPrecedence = topic.create_model(db)
+    model_dict["Topic"] = Topic
+    model_dict["TopicPrecedence"] = TopicPrecedence
+    return model_dict

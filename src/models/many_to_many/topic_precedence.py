@@ -26,16 +26,12 @@ def get_helper_table(db: SQLAlchemy) -> Table:
     return db.Table(
         "topic_precedence",
         db.Column(
-            "predecessor",
-            UUID(as_uuid=True),
-            db.ForeignKey("topic.id"),
-            primary_key=True,
+            "predecessor", UUID(as_uuid=True), db.ForeignKey("topic.id"), nullable=False
         ),
         db.Column(
-            "successor",
-            UUID(as_uuid=True),
-            db.ForeignKey("topic.id"),
-            primary_key=True,
+            "successor", UUID(as_uuid=True), db.ForeignKey("topic.id"), nullable=False
         ),
         db.Column("created_at", db.DateTime, nullable=False, default=datetime.utcnow),
+        db.Column("knowledge_weight", db.Integer, nullable=False, default=50),
+        db.UniqueConstraint("predecessor", "successor"),
     )

@@ -37,9 +37,10 @@ def create_model(db: SQLAlchemy):
         successors = db.relationship(
             "Topic",
             secondary=secondary_table,
-            foreign_keys=[secondary_table.c.predecessor],
+            primaryjoin=(id == secondary_table.c.predecessor),
+            secondaryjoin=(id == secondary_table.c.successor),
             lazy=True,
             backref=db.backref("predecessors", lazy=True),
         )
 
-    return Topic
+    return (Topic, secondary_table)
