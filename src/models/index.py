@@ -15,7 +15,6 @@ Typical usage example:
 
     ...
 """
-from pyexpat import model
 from typing import Dict
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import Model
