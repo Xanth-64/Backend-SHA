@@ -144,7 +144,7 @@ def create_auth_blueprint(
                     "message": "Wrong Password",
                 },
                 "message": "Wrong Password",
-            }
+            }, 400
         token = requests.post(
             f"https://identitytoolkit.googleapis.com/v1/accounts:update?key={environ.get('GOOGLE_API_KEY')}",
             data={
