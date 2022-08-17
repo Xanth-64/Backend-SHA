@@ -9,6 +9,9 @@ from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from src.services.utils.controllers.get_all_controller import get_all_controller_factory
+from src.services.utils.controllers.user.get_all_users_with_pagination_controller import (
+    get_all_users_with_pagination_controller_factory,
+)
 from src.services.utils.controllers.get_all_with_pagination_controller import (
     get_all_with_pagination_controller_factory,
 )
@@ -61,8 +64,8 @@ def create_user_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
-    get_all_with_pagination_controller_factory(
-        models["User"],
+    get_all_users_with_pagination_controller_factory(
+        models,
         schemas["User_DefaultSchema"],
         blueprint,
         expected_role="teacher",

@@ -29,6 +29,7 @@ def create_app():
     Returns:
         Flask:Flask Application for Data Fetching & Filtering and Business Logic.
     """
+
     app = Flask(__name__)
     CORS(app)
     ## Initialize Config
@@ -49,6 +50,9 @@ def create_app():
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = (
         environ.get("ENV_NAME") == "DEV" or environ.get("ENV_NAME") == "STAGING"
+    )
+    app.config["FLASK_ENV"] = (
+        "development" if environ.get("ENV_NAME") == "DEV" else "production"
     )
 
     app.config["SQLALCHEMY_DATABASE_URI"] = (
