@@ -35,6 +35,9 @@ from src.routes.test_question.test_question_blueprint import (
     create_test_question_blueprint,
 )
 from src.routes.topic.topic_blueprint import create_topic_blueprint
+from src.routes.topic_precedence.topic_precedence_blueprint import (
+    create_topic_precedence_blueprint,
+)
 from src.routes.user.user_blueprint import create_user_blueprint
 
 
@@ -80,7 +83,9 @@ def create_blueprints(
     app.register_blueprint(
         blueprint=create_topic_blueprint(db, models, schemas, firebase_app)
     )
-
+    app.register_blueprint(
+        blueprint=create_topic_precedence_blueprint(db, models, schemas, firebase_app)
+    )
     app.register_blueprint(
         blueprint=create_user_blueprint(db, models, schemas, firebase_app)
     )

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from typing import Dict
 from easygraph.classes.directed_graph import DiGraph
 from firebase_admin import App
 from flask import Blueprint, request
@@ -12,14 +13,14 @@ from src.lib.exceptions.circular_exception import CircularException
 
 def create_topic_prelations_controller_factory(
     db: SQLAlchemy,
-    models: dict,
-    topic_schema: Schema,
+    models: Dict[str, Model],
+    schemas: Dict[str, Schema],
     blueprint: Blueprint,
     expected_role: str = None,
     firebase_app: App = None,
     user_model: Model = None,
 ):
-    @blueprint.route("/prelations", methods=["POST"])
+    @blueprint.route("/", methods=["POST"])
     @auth_middleware(
         expected_role=expected_role, firebase_app=firebase_app, user_model=user_model
     )
@@ -51,7 +52,20 @@ def create_topic_prelations_controller_factory(
                 },
                 "message": "Successor Not Found",
             }, 400
-        # Validate that No Circular Precedence Exists
+        # Validate that Relationship Does not yet Exist
+        if successor.id in [
+            relationship.successor_id for relationship in predecessor.successors
+        ]:
+            return {
+                "success": False,
+                "data": {
+                    "error": "ALREADY_EXISTS",
+                    "message": "Relationship Already Exists",
+                },
+                "message": "Relationship Already Exists",
+            }, 400
+
+        # Validate that No Circular Precedence Exists and that No Path Between the Two Topics Exists
         # Construct a Graph of the Precedence Relationships
 
         graph = DiGraph()
@@ -63,32 +77,49 @@ def create_topic_prelations_controller_factory(
         # Add Edges to Graph
         graph.add_edges(
             [
-                (relationship.predecessor, relationship.successor)
-                for relationship in db.engine.execute(
-                    models["TopicPrecedence"].select()
-                ).all()
+                (relationship.predecessor_id, relationship.successor_id)
+                for relationship in models["TopicPrecedence"].query.all()
             ]
         )
-        graph.add_edge(predecessor.id, successor.id)
+
+        # Check that No Path exists between the Two Topics
+
+        def dfs_pathfinder(start_node, objective_node):
+            if start_node == objective_node:
+                return True
+            for successor in graph.successors(start_node):
+                if dfs_pathfinder(successor, objective_node):
+                    return True
+            return False
+
+        if dfs_pathfinder(predecessor.id, successor.id):
+            return {
+                "success": False,
+                "data": {
+                    "error": "PATH_EXISTS",
+                    "message": "Path Between Nodes Already Exists",
+                },
+                "message": "Path Between Nodes Already Exists",
+            }, 400
 
         # Check if the Graph has a Directed Cycle using DFS from the Predecessor Node
+        graph.add_edge(predecessor.id, successor.id)
 
         visited = set()
         finished = set()
 
-        def dfs(node):
-            print("Visiting Node", node)
+        def dfs_validate_circular(node):
             if node in finished:
                 return
             if node in visited:
                 raise CircularException("Circular Precedence Found")
             visited.add(node)
             for successor in graph.successors(node):
-                dfs(successor)
+                dfs_validate_circular(successor)
             finished.add(node)
 
         try:
-            dfs(predecessor.id)
+            dfs_validate_circular(predecessor.id)
         except CircularException:
             return {
                 "success": False,
@@ -99,7 +130,15 @@ def create_topic_prelations_controller_factory(
                 "message": "Circular Precedence Found",
             }, 400
 
-        predecessor.successors.append(successor)
+        # Create the Precedence Relationship
+        precedence = models["TopicPrecedence"](
+            knowledge_weight=req_data.get("knowledge_weight"),
+            predecessor_id=predecessor.id,
+            successor_id=successor.id,
+        )
+
+        predecessor.successors.append(precedence)
+        successor.predecessors.append(precedence)
         try:
             db.session.commit()
         except IntegrityError:
@@ -115,7 +154,14 @@ def create_topic_prelations_controller_factory(
             "success": True,
             "message": "Model Data Created Successfully",
             "data": {
-                "predecessor": topic_schema().dump(obj=predecessor, many=False),
-                "successor": topic_schema().dump(obj=successor, many=False),
+                "predecessor": schemas["Topic_DefaultSchema"]().dump(
+                    obj=predecessor, many=False
+                ),
+                "successor": schemas["Topic_DefaultSchema"]().dump(
+                    obj=successor, many=False
+                ),
+                "precedences": schemas["TopicPrecedence_DefaultSchema"]().dump(
+                    obj=precedence, many=False
+                ),
             },
         }, 200
