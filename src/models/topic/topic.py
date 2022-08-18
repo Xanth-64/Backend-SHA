@@ -18,12 +18,10 @@ from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
-from src.models.many_to_many import topic_precedence
+from src.models.topic_predence import topic_precedence
 
 
 def create_model(db: SQLAlchemy):
-    secondary_table = topic_precedence.get_helper_table(db)
-
     class Topic(db.Model):
         id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
         created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -35,12 +33,15 @@ def create_model(db: SQLAlchemy):
         default_knowledge = db.Column(db.Integer(), default=50)
 
         successors = db.relationship(
-            "Topic",
-            secondary=secondary_table,
-            primaryjoin=(id == secondary_table.c.predecessor),
-            secondaryjoin=(id == secondary_table.c.successor),
-            lazy=True,
-            backref=db.backref("predecessors", lazy=True),
+            "TopicPrecedence",
+            back_populates="predecessor",
+            primaryjoin="TopicPrecedence.predecessor_id == Topic.id",
         )
 
-    return (Topic, secondary_table)
+        predecessors = db.relationship(
+            "TopicPrecedence",
+            back_populates="successor",
+            primaryjoin="TopicPrecedence.successor_id == Topic.id",
+        )
+
+    return Topic

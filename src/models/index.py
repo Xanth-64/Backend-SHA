@@ -26,6 +26,7 @@ from src.models.role import role
 from src.models.template import template
 from src.models.test_question import test_question
 from src.models.topic import topic
+from src.models.topic_predence import topic_precedence
 from src.models.user import user
 
 
@@ -40,8 +41,7 @@ def create_models(db: SQLAlchemy) -> Dict[str, Model]:
         "Template": template.create_model(db),
         "TestQuestion": test_question.create_model(db),
         "User": user.create_model(db),
+        "Topic": topic.create_model(db),
+        "TopicPrecedence": topic_precedence.create_model(db),
     }
-    Topic, TopicPrecedence = topic.create_model(db)
-    model_dict["Topic"] = Topic
-    model_dict["TopicPrecedence"] = TopicPrecedence
     return model_dict
