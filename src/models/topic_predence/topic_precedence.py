@@ -23,21 +23,6 @@ from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 
-def get_helper_table(db: SQLAlchemy) -> Table:
-    return db.Table(
-        "topic_precedence",
-        db.Column(
-            "predecessor", UUID(as_uuid=True), db.ForeignKey("topic.id"), nullable=False
-        ),
-        db.Column(
-            "successor", UUID(as_uuid=True), db.ForeignKey("topic.id"), nullable=False
-        ),
-        db.Column("created_at", db.DateTime, nullable=False, default=datetime.utcnow),
-        db.Column("knowledge_weight", db.Integer, nullable=False, default=50),
-        db.UniqueConstraint("predecessor", "successor"),
-    )
-
-
 def create_model(db: SQLAlchemy):
     class TopicPrecedence(db.Model):
         __tablename__ = "topic_precedence"

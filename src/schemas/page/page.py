@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from typing import Dict
+
+from flask_marshmallow import Marshmallow
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
-from flask_marshmallow import Marshmallow
-from typing import Dict
 
 
 def create_page_inheritance_schema(
