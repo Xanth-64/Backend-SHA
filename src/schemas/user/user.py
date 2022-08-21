@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from typing import Dict
 from flask_marshmallow import Marshmallow
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
@@ -26,6 +27,7 @@ def create_current_user_schema(
             model = db_model
 
         id = ma.auto_field()
+        created_at = ma.auto_field()
         email = ma.auto_field()
         first_name = ma.auto_field()
         last_name = ma.auto_field()
@@ -34,3 +36,21 @@ def create_current_user_schema(
         role = ma.auto_field()
 
     return CurrentUserSchema
+
+
+def create_user_and_role_schema(
+    ma: Marshmallow, schemas: Dict[str, Schema], models: Dict[str, Model]
+) -> Schema:
+    class UserAndRoleSchema(ma.SQLAlchemySchema):
+        class Meta:
+            model = models["User"]
+
+        id = ma.auto_field()
+        created_at = ma.auto_field()
+        email = ma.auto_field()
+        first_name = ma.auto_field()
+        last_name = ma.auto_field()
+        image_url = ma.auto_field()
+        role = ma.Nested(schemas["Role_DefaultSchema"], many=True)
+
+    return UserAndRoleSchema

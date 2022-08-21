@@ -6,17 +6,21 @@ Aggregating them under the same object.
 
 Typical usage example:"""
 from typing import Dict
+
 from flask_marshmallow import Marshmallow
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
-
+from src.schemas.topic.topic import create_topic_precedence_schema
 from src.schemas.topic_precedence.topic_precedence import (
     create_topic_precedence_relation_schema,
 )
-from .page.page import create_page_inheritance_schema
+from src.schemas.user.user import (
+    create_current_user_schema,
+    create_user_and_role_schema,
+)
 from src.services.utils.schemas.create_default_schema import create_default_schema
-from src.schemas.user.user import create_current_user_schema
-from src.schemas.topic.topic import create_topic_precedence_schema
+
+from .page.page import create_page_inheritance_schema
 
 
 def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schema]:
@@ -40,4 +44,5 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
     schemas[
         "TopicPrecedence_TopicPrecedenceRelationSchema"
     ] = create_topic_precedence_relation_schema(ma, schemas, models)
+    schemas["User_UserAndRoleSchema"] = create_user_and_role_schema(ma, schemas, models)
     return schemas
