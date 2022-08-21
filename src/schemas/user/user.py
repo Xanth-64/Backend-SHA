@@ -27,6 +27,7 @@ def create_current_user_schema(
             model = db_model
 
         id = ma.auto_field()
+        created_at = ma.auto_field()
         email = ma.auto_field()
         first_name = ma.auto_field()
         last_name = ma.auto_field()
@@ -45,6 +46,7 @@ def create_user_and_role_schema(
             model = models["User"]
 
         id = ma.auto_field()
+        created_at = ma.auto_field()
         email = ma.auto_field()
         first_name = ma.auto_field()
         last_name = ma.auto_field()
