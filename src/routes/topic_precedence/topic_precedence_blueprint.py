@@ -8,6 +8,7 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
+from src.services.utils.controllers.get_all_controller import get_all_controller_factory
 from src.services.utils.controllers.get_all_with_pagination_controller import (
     get_all_with_pagination_controller_factory,
 )
@@ -35,6 +36,14 @@ def create_topic_precedence_blueprint(
     """
     blueprint = Blueprint(
         name="/topics/prelations", import_name=__name__, url_prefix="/topics/prelations"
+    )
+    get_all_controller_factory(
+        models["TopicPrecedence"],
+        schemas["TopicPrecedence_TopicPrecedenceRelationSchema"],
+        blueprint,
+        expected_role="student",
+        firebase_app=firebase_app,
+        user_model=models["User"],
     )
     get_all_with_pagination_controller_factory(
         models["TopicPrecedence"],
