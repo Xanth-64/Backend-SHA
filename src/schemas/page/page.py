@@ -18,6 +18,6 @@ def create_page_inheritance_schema(
         relative_position = ma.auto_field()
         template_id = ma.auto_field()
         learning_content = ma.Nested(schemas["LearningContent_DefaultSchema"])
-        practice_test = ma.Nested(schemas["PracticeTest_DefaultSchema"])
+        practice_test = ma.Nested(schemas["PracticeTest_WithoutAnswers"])
 
     return PageInheritanceSchema

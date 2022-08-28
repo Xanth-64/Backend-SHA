@@ -15,6 +15,9 @@ from src.services.utils.controllers.get_all_controller import get_all_controller
 from src.services.utils.controllers.get_by_id_controller import (
     get_by_id_controller_factory,
 )
+from src.services.utils.controllers.practice_test.update_one_practice_test import (
+    update_one_practice_test_controller_factory,
+)
 from src.services.utils.controllers.update_by_id_controller import (
     update_by_id_controller_factory,
 )
@@ -40,7 +43,14 @@ def create_practice_test_blueprint(
     blueprint = Blueprint(
         name="/practice_tests", import_name=__name__, url_prefix="/practice_tests"
     )
-
+    sub_blueprints = {
+        "teacher": Blueprint(
+            name="/teacher", import_name=__name__, url_prefix="/teacher"
+        ),
+        "student": Blueprint(
+            name="/student", import_name=__name__, url_prefix="/student"
+        ),
+    }
     create_one_controller_factory(
         db,
         models["PracticeTest"],
@@ -58,18 +68,27 @@ def create_practice_test_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
+    # Controller for Getting By Id Subdivides Between Student and Teacher
     get_by_id_controller_factory(
         models["PracticeTest"],
-        schemas["PracticeTest_DefaultSchema"],
-        blueprint,
+        schemas["PracticeTest_WithAnswers"],
+        sub_blueprints["teacher"],
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    get_by_id_controller_factory(
+        models["PracticeTest"],
+        schemas["PracticeTest_WithoutAnswers"],
+        sub_blueprints["student"],
         expected_role="student",
         firebase_app=firebase_app,
         user_model=models["User"],
     )
-    update_by_id_controller_factory(
+    update_one_practice_test_controller_factory(
         db,
-        models["PracticeTest"],
-        schemas["PracticeTest_DefaultSchema"],
+        models,
+        schemas["PracticeTest_WithAnswers"],
         blueprint,
         expected_role="teacher",
         firebase_app=firebase_app,
@@ -83,4 +102,6 @@ def create_practice_test_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
+    for sub_blueprint in sub_blueprints.values():
+        blueprint.register_blueprint(sub_blueprint)
     return blueprint

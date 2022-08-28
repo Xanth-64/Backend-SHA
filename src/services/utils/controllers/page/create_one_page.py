@@ -54,9 +54,25 @@ def create_one_page_controller_factory(
                 **req_data.get("learning_content")
             )
         if req_data.get("practice_test"):
-            new_instance.practice_test = models["LearningContent"](
-                **req_data.get("practice_test")
+            practice_test = req_data.get("practice_test")
+            new_instance.practice_test = models["PracticeTest"](
+                title=practice_test.get("title"),
+                show_on_init=practice_test.get("show_on_init"),
             )
+            for i, test_question in enumerate(
+                practice_test.get("test_questions"), start=1
+            ):
+                new_test_question = models["TestQuestion"](
+                    question_type=test_question.get("question_type"),
+                    question_prompt=test_question.get("question_prompt"),
+                    relative_position=i,
+                    question_score=test_question.get("question_score"),
+                )
+                for answer_alternative in test_question.get("answer_alternatives"):
+                    new_test_question.answer_alternatives.append(
+                        models["AnswerAlternative"](**answer_alternative)
+                    )
+                new_instance.practice_test.test_questions.append(new_test_question)
         try:
             db.session.add(new_instance)
             db.session.commit()

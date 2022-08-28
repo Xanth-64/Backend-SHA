@@ -8,8 +8,14 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
+from src.services.utils.controllers.delete_by_id_controller import (
+    delete_by_id_controller_factory,
+)
 from src.services.utils.controllers.page.create_one_page import (
     create_one_page_controller_factory,
+)
+from src.services.utils.controllers.page.delete_one_page import (
+    delete_one_page_controller_factory,
 )
 from src.services.utils.controllers.page.get_pages_for_template import (
     get_pages_for_template_factory,
@@ -67,6 +73,15 @@ def create_page_blueprint(
         user_model=models["User"],
     )
     update_by_id_controller_factory(
+        db,
+        models["Page"],
+        schemas["Page_PageInheritanceSchema"],
+        blueprint,
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    delete_one_page_controller_factory(
         db,
         models["Page"],
         schemas["Page_PageInheritanceSchema"],
