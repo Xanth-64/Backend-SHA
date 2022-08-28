@@ -15,6 +15,9 @@ from src.services.utils.controllers.get_all_controller import get_all_controller
 from src.services.utils.controllers.get_by_id_controller import (
     get_by_id_controller_factory,
 )
+from src.services.utils.controllers.practice_test.update_one_practice_test import (
+    update_one_practice_test_controller_factory,
+)
 from src.services.utils.controllers.update_by_id_controller import (
     update_by_id_controller_factory,
 )
@@ -82,10 +85,10 @@ def create_practice_test_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
-    update_by_id_controller_factory(
+    update_one_practice_test_controller_factory(
         db,
-        models["PracticeTest"],
-        schemas["PracticeTest_DefaultSchema"],
+        models,
+        schemas["PracticeTest_WithAnswers"],
         blueprint,
         expected_role="teacher",
         firebase_app=firebase_app,

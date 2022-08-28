@@ -69,7 +69,7 @@ def switch_page_controller_factory(
         elif move_direction == "down":
             page_exchange = page_model.query.filter_by(
                 relative_position=page.relative_position + 1,
-                template_id=page.topic_id,
+                template_id=page.template_id,
             ).first()
             if not page_exchange:
                 return {
