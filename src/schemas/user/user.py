@@ -7,6 +7,7 @@ from flask_sqlalchemy.model import Model
 
 def create_current_user_schema(
     ma: Marshmallow,
+    schemas: Dict[str, Schema],
     db_model: Model,
 ) -> Schema:
     """Helper Function that Creates a Default Schema for a given Model
@@ -32,8 +33,8 @@ def create_current_user_schema(
         first_name = ma.auto_field()
         last_name = ma.auto_field()
         image_url = ma.auto_field()
-
-        role = ma.auto_field()
+        vark_completed = ma.auto_field()
+        learning_style = ma.Nested(schemas["LearningStyle_DefaultSchema"])
 
     return CurrentUserSchema
 
@@ -51,6 +52,7 @@ def create_user_and_role_schema(
         first_name = ma.auto_field()
         last_name = ma.auto_field()
         image_url = ma.auto_field()
+        vark_completed = ma.auto_field()
         role = ma.Nested(schemas["Role_DefaultSchema"], many=True)
 
     return UserAndRoleSchema

@@ -45,7 +45,7 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
         )
     # Create Schema for Representing the Current User Object
     schemas["User_CurrentUserSchema"] = create_current_user_schema(
-        ma=ma, db_model=models["User"]
+        ma=ma, schemas=schemas, db_model=models["User"]
     )
     # Create Schemas for the Different ways of presenting Answer Alternatives
     schemas[

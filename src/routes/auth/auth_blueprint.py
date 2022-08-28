@@ -51,6 +51,7 @@ def create_auth_blueprint(
                     else "student"
                 )
             )
+            new_instance.learning_style = models["LearningStyle"]()
             try:
                 db.session.add(new_instance)
                 db.session.commit()
