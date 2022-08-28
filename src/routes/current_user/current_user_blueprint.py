@@ -47,7 +47,9 @@ def create_current_user_blueprint(
             "success": True,
             "message": "Current User Data Retrieved Successfully",
             "data": {
-                "user": schemas["User_DefaultSchema"]().dump(current_user, many=False),
+                "user": schemas["User_CurrentUserSchema"]().dump(
+                    current_user, many=False
+                ),
                 "role": schemas["Role_DefaultSchema"]().dump(
                     current_user.role, many=True
                 ),

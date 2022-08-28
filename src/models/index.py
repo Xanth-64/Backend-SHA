@@ -20,6 +20,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import Model
 from src.models.answer_alternative import answer_alternative
 from src.models.learning_content import learning_content
+from src.models.learning_style import learning_style
 from src.models.page import page
 from src.models.practice_test import practice_test
 from src.models.role import role
@@ -35,6 +36,7 @@ def create_models(db: SQLAlchemy) -> Dict[str, Model]:
     model_dict = {
         "AnswerAlternative": answer_alternative.create_model(db),
         "LearningContent": learning_content.create_model(db),
+        "LearningStyle": learning_style.create_model(db),
         "Page": page.create_model(db),
         "PracticeTest": practice_test.create_model(db),
         "Role": role.create_model(db),
