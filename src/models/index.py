@@ -23,8 +23,11 @@ from src.models.learning_content import learning_content
 from src.models.learning_style import learning_style
 from src.models.page import page
 from src.models.practice_test import practice_test
+from src.models.question_answer import question_answer
 from src.models.role import role
+from src.models.selected_answer_alternatives import selected_answer_alternatives
 from src.models.template import template
+from src.models.test_attempt import test_attempt
 from src.models.test_question import test_question
 from src.models.topic import topic
 from src.models.topic_predence import topic_precedence
@@ -39,11 +42,14 @@ def create_models(db: SQLAlchemy) -> Dict[str, Model]:
         "LearningStyle": learning_style.create_model(db),
         "Page": page.create_model(db),
         "PracticeTest": practice_test.create_model(db),
+        "QuestionAnswer": question_answer.create_model(db),
         "Role": role.create_model(db),
+        "SelectedAnswerAlternatives": selected_answer_alternatives.create_model(db),
         "Template": template.create_model(db),
+        "TestAttempt": test_attempt.create_model(db),
         "TestQuestion": test_question.create_model(db),
-        "User": user.create_model(db),
         "Topic": topic.create_model(db),
         "TopicPrecedence": topic_precedence.create_model(db),
+        "User": user.create_model(db),
     }
     return model_dict

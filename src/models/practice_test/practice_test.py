@@ -33,11 +33,19 @@ def create_model(db: SQLAlchemy):
         page_id = db.Column(
             UUID(as_uuid=True), db.ForeignKey("page.id"), nullable=False
         )
+        total_score = db.Column(db.Integer, nullable=False)
 
         test_questions = db.relationship(
             "TestQuestion",
             backref="practice_test",
-            lazy=True,
+            lazy="dynamic",
+            uselist=True,
+            cascade="all, delete-orphan",
+        )
+        test_attempts = db.relationship(
+            "TestAttempt",
+            backref="practice_test",
+            lazy="dynamic",
             uselist=True,
             cascade="all, delete-orphan",
         )

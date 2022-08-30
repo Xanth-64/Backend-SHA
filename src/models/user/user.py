@@ -46,5 +46,12 @@ def create_model(db: SQLAlchemy):
             uselist=False,
             cascade="all, delete-orphan",
         )
+        test_attempts = db.relationship(
+            "TestAttempt",
+            backref="user",
+            lazy=True,
+            uselist=True,
+            cascade="all, delete-orphan",
+        )
 
     return User

@@ -32,6 +32,7 @@ from src.routes.practice_test.practice_test_blueprint import (
 )
 from src.routes.role.role_blueprint import create_role_blueprint
 from src.routes.template.template_blueprint import create_template_blueprint
+from src.routes.test_attempt.test_attempt import create_test_attempt_blueprint
 from src.routes.test_question.test_question_blueprint import (
     create_test_question_blueprint,
 )
@@ -80,6 +81,9 @@ def create_blueprints(
     )
     app.register_blueprint(
         blueprint=create_template_blueprint(db, models, schemas, firebase_app)
+    )
+    app.register_blueprint(
+        blueprint=create_test_attempt_blueprint(db, models, schemas, firebase_app)
     )
     app.register_blueprint(
         blueprint=create_test_question_blueprint(db, models, schemas, firebase_app)
