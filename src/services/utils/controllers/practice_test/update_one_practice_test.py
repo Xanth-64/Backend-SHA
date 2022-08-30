@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import Dict
+
 from firebase_admin import App
 from flask import Blueprint, request
 from flask_marshmallow.schema import Schema
@@ -40,6 +41,15 @@ def update_one_practice_test_controller_factory(
                     "message": f"uuid {uuid} not found",
                 },
             }, 400
+        if len(old_data.test_attempts.all()) > 0:
+            return {
+                "success": False,
+                "message": f"uuid {uuid} has test attempts",
+                "data": {
+                    "error": "MODEL_HAS_TEST_ATTEMPTS",
+                    "message": f"uuid {uuid} has test attempts",
+                },
+            }, 400
         if req_data.get("title"):
             old_data.title = req_data.get("title")
         if req_data.get("show_on_init"):
@@ -49,6 +59,7 @@ def update_one_practice_test_controller_factory(
                 db.session.delete(test_question)
             db.session.commit()
             old_data.test_questions = []
+            total_score = 0
             for i, test_question in enumerate(req_data.get("test_questions"), start=1):
                 new_test_question = models["TestQuestion"](
                     question_type=test_question.get("question_type"),
@@ -61,6 +72,8 @@ def update_one_practice_test_controller_factory(
                         models["AnswerAlternative"](**answer_alternative)
                     )
                 old_data.test_questions.append(new_test_question)
+                total_score += new_test_question.question_score
+            old_data.total_score = total_score
         try:
             db.session.commit()
 

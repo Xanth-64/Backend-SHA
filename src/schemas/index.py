@@ -16,6 +16,10 @@ from src.schemas.answer_alternative.answer_alternative import (
 from src.schemas.practice_test.practice_test import (
     create_test_with_answer_alternatives_schema,
 )
+from src.schemas.question_answer.question_answer import (
+    create_question_answer_complete_schema,
+)
+from src.schemas.test_attempt.test_attempt import create_test_attempt_complete_schema
 from src.schemas.test_question.test_question import (
     create_test_question_inheritance_schema,
 )
@@ -78,5 +82,16 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
     schemas[
         "TopicPrecedence_TopicPrecedenceRelationSchema"
     ] = create_topic_precedence_relation_schema(ma, schemas, models)
+
+    # Create a Schema for a Question Answer
+    schemas["QuestionAnswer_CompleteSchema"] = create_question_answer_complete_schema(
+        ma, schemas, models
+    )
+    # Create a Schema for a Test Attempt
+    schemas["TestAttempt_CompleteSchema"] = create_test_attempt_complete_schema(
+        ma, schemas, models
+    )
+
+    # Create a Schema for including a user and their role
     schemas["User_UserAndRoleSchema"] = create_user_and_role_schema(ma, schemas, models)
     return schemas

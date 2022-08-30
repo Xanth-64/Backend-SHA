@@ -43,7 +43,14 @@ def create_model(db: SQLAlchemy):
         answer_alternatives = db.relationship(
             "AnswerAlternative",
             backref="test_question",
-            lazy=True,
+            lazy="dynamic",
+            uselist=True,
+            cascade="all, delete-orphan",
+        )
+        question_answers = db.relationship(
+            "QuestionAnswer",
+            backref="test_question",
+            lazy="dynamic",
             uselist=True,
             cascade="all, delete-orphan",
         )

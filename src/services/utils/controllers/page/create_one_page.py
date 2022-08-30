@@ -59,6 +59,7 @@ def create_one_page_controller_factory(
                 title=practice_test.get("title"),
                 show_on_init=practice_test.get("show_on_init"),
             )
+            total_score = 0
             for i, test_question in enumerate(
                 practice_test.get("test_questions"), start=1
             ):
@@ -73,6 +74,8 @@ def create_one_page_controller_factory(
                         models["AnswerAlternative"](**answer_alternative)
                     )
                 new_instance.practice_test.test_questions.append(new_test_question)
+                total_score += new_test_question.question_score
+            new_instance.practice_test.total_score = total_score
         try:
             db.session.add(new_instance)
             db.session.commit()

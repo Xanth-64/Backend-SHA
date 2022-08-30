@@ -19,6 +19,7 @@ def create_test_with_answer_alternatives_schema(
         created_at = ma.auto_field()
         title = ma.auto_field()
         show_on_init = ma.auto_field()
+        total_score = ma.auto_field()
         page_id = ma.auto_field()
         test_questions = ma.Nested(test_question_schema, many=True)
 

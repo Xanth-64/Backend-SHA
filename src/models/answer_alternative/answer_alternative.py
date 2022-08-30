@@ -33,7 +33,12 @@ def create_model(db: SQLAlchemy):
         test_question_id = db.Column(
             UUID(as_uuid=True), db.ForeignKey("test_question.id"), nullable=False
         )
-
+        selected_answer_alternatives = db.relationship(
+            "SelectedAnswerAlternative",
+            backref="answer_alternative",
+            lazy="dynamic",
+            cascade="all, delete-orphan",
+        )
         UniqueConstraint(
             alternative_text, test_question_id, name="unique_question_options"
         )
