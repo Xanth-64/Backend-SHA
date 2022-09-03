@@ -34,4 +34,12 @@ def create_model(db: SQLAlchemy):
             UUID(as_uuid=True), db.ForeignKey("page.id"), nullable=False
         )
 
+        measurable_interactions = db.relationship(
+            "MeasurableInteraction",
+            backref="learning_content",
+            lazy="dynamic",
+            uselist=True,
+            cascade="all, delete-orphan",
+        )
+
     return LearningContent
