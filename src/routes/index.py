@@ -22,10 +22,16 @@ from src.routes.answer_alternative.answer_alternative_blueprint import (
 )
 from src.routes.auth.auth_blueprint import create_auth_blueprint
 from src.routes.current_user.current_user_blueprint import create_current_user_blueprint
+from src.routes.interaction_fired.interaction_fired import (
+    create_interaction_fired_blueprint,
+)
 from src.routes.learning_content.learning_content_blueprint import (
     create_learning_content_blueprint,
 )
 from src.routes.learning_style.learning_style import create_learning_style_blueprint
+from src.routes.measurable_interaction.measurable_interaction import (
+    create_measurable_interaction_blueprint,
+)
 from src.routes.page.page_blueprint import create_page_blueprint
 from src.routes.practice_test.practice_test_blueprint import (
     create_practice_test_blueprint,
@@ -65,10 +71,18 @@ def create_blueprints(
         blueprint=create_current_user_blueprint(db, models, schemas, firebase_app)
     )
     app.register_blueprint(
+        blueprint=create_interaction_fired_blueprint(db, models, schemas, firebase_app)
+    )
+    app.register_blueprint(
         blueprint=create_learning_content_blueprint(db, models, schemas, firebase_app)
     )
     app.register_blueprint(
         blueprint=create_learning_style_blueprint(db, models, schemas, firebase_app)
+    )
+    app.register_blueprint(
+        blueprint=create_measurable_interaction_blueprint(
+            db, models, schemas, firebase_app
+        )
     )
     app.register_blueprint(
         blueprint=create_page_blueprint(db, models, schemas, firebase_app)

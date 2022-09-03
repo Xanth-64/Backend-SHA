@@ -53,5 +53,12 @@ def create_model(db: SQLAlchemy):
             uselist=True,
             cascade="all, delete-orphan",
         )
+        interactions_fired = db.relationship(
+            "InteractionFired",
+            backref="user",
+            lazy="dynamic",
+            uselist=True,
+            cascade="all, delete-orphan",
+        )
 
     return User

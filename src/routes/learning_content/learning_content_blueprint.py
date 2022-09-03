@@ -71,4 +71,5 @@ def create_learning_content_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
+
     return blueprint
