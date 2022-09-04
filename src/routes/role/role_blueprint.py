@@ -8,14 +8,16 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from src.services.utils.controllers.create_one_controller import (
+from src.services.utils.controllers.generics.create_one_controller import (
     create_one_controller_factory,
 )
-from src.services.utils.controllers.get_all_controller import get_all_controller_factory
-from src.services.utils.controllers.get_by_id_controller import (
+from src.services.utils.controllers.generics.get_all_controller import (
+    get_all_controller_factory,
+)
+from src.services.utils.controllers.generics.get_by_id_controller import (
     get_by_id_controller_factory,
 )
-from src.services.utils.controllers.update_by_id_controller import (
+from src.services.utils.controllers.generics.update_by_id_controller import (
     update_by_id_controller_factory,
 )
 

@@ -39,6 +39,7 @@ def create_model(db: SQLAlchemy):
         practice_test_id = db.Column(
             UUID(as_uuid=True), db.ForeignKey("practice_test.id"), nullable=False
         )
+        question_hint = db.Column(db.String(255), default="")
 
         answer_alternatives = db.relationship(
             "AnswerAlternative",
@@ -53,6 +54,10 @@ def create_model(db: SQLAlchemy):
             lazy="dynamic",
             uselist=True,
             cascade="all, delete-orphan",
+        )
+
+        adaptative_object_id = db.Column(
+            UUID(as_uuid=True), db.ForeignKey("adaptative_object.id"), nullable=False
         )
 
         UniqueConstraint(

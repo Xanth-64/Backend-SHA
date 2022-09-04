@@ -93,31 +93,31 @@ def create_app():
     #     }, 500
 
     @app.errorhandler(HTTPException)
-    def handle_http_exception(e):
+    def handle_http_exception(ex):
         """Return JSON instead of HTML for HTTP errors."""
         # start with the correct headers and status code from the error
-        response = e.get_response()
+        response = ex.get_response()
         # replace the body with JSON
         response.data = json.dumps(
             {
-                "code": e.code,
-                "name": e.name,
-                "description": e.description,
+                "code": ex.code,
+                "name": ex.name,
+                "description": ex.description,
             }
         )
         response.content_type = "application/json"
         return response
 
     @app.errorhandler(Exception)
-    def handle_exception(e):
+    def handle_exception(ex):
         # pass through HTTP errors
-        if isinstance(e, HTTPException):
-            return e
+        if isinstance(ex, HTTPException):
+            return ex
 
         # now you're handling non-HTTP exceptions only
         return {
             "success": False,
-            "code": {"name": str(e), "traceback": traceback.format_exc()},
+            "code": {"name": str(ex), "traceback": traceback.format_exc()},
             "message": "Unexpected Runtime exception Found",
         }, 500
 

@@ -17,6 +17,15 @@ Typical usage example:
 from firebase_admin import App
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from src.routes.adaptation_condition.adaptation_condition import (
+    create_adaptation_condition_blueprint,
+)
+from src.routes.adaptative_event.adaptative_event import (
+    create_adaptative_event_blueprint,
+)
+from src.routes.adaptative_object.adaptative_object import (
+    create_adaptative_object_blueprint,
+)
 from src.routes.answer_alternative.answer_alternative_blueprint import (
     create_answer_alternative_blueprint,
 )
@@ -61,6 +70,17 @@ def create_blueprints(
         app (Flask): Flask Application Object.
         firebase_app (App): Firebase App Object.
     """
+    app.register_blueprint(
+        blueprint=create_adaptation_condition_blueprint(
+            db, models, schemas, firebase_app
+        )
+    )
+    app.register_blueprint(
+        blueprint=create_adaptative_event_blueprint(db, models, schemas, firebase_app)
+    )
+    app.register_blueprint(
+        blueprint=create_adaptative_object_blueprint(db, models, schemas, firebase_app)
+    )
     app.register_blueprint(
         blueprint=create_answer_alternative_blueprint(db, models, schemas, firebase_app)
     )

@@ -10,6 +10,12 @@ from typing import Dict
 from flask_marshmallow import Marshmallow
 from flask_marshmallow.schema import Schema
 from flask_sqlalchemy.model import Model
+from src.schemas.adaptative_event.adaptative_event import (
+    create_adaptative_event_complete_schema,
+)
+from src.schemas.adaptative_object.adaptative_object import (
+    create_adaptative_object_complete_schema,
+)
 from src.schemas.answer_alternative.answer_alternative import (
     create_answer_alternative_student_schema,
 )
@@ -23,7 +29,6 @@ from src.schemas.test_attempt.test_attempt import create_test_attempt_complete_s
 from src.schemas.test_question.test_question import (
     create_test_question_inheritance_schema,
 )
-from src.schemas.topic.topic import create_topic_precedence_schema
 from src.schemas.topic_precedence.topic_precedence import (
     create_topic_precedence_relation_schema,
 )
@@ -51,6 +56,15 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
     schemas["User_CurrentUserSchema"] = create_current_user_schema(
         ma=ma, schemas=schemas, db_model=models["User"]
     )
+    # Create a Schema for Handling Adaptative Events and their Conditions
+    schemas["AdaptativeEvent_CompleteSchema"] = create_adaptative_event_complete_schema(
+        ma, schemas, models
+    )
+
+    # Create a Schema for Handling Adaptative Objects and their Events
+    schemas[
+        "AdaptativeObject_CompleteSchema"
+    ] = create_adaptative_object_complete_schema(ma, schemas, models)
     # Create Schemas for the Different ways of presenting Answer Alternatives
     schemas[
         "AnswerAlternative_StudentSchema"
@@ -60,10 +74,16 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
     schemas[
         "TestQuestion_WithoutAnswersSchema"
     ] = create_test_question_inheritance_schema(
-        ma, schemas["AnswerAlternative_StudentSchema"], models
+        ma,
+        schemas["AnswerAlternative_StudentSchema"],
+        schemas["AdaptativeObject_CompleteSchema"],
+        models,
     )
     schemas["TestQuestion_WithAnswersSchema"] = create_test_question_inheritance_schema(
-        ma, schemas["AnswerAlternative_DefaultSchema"], models
+        ma,
+        schemas["AnswerAlternative_DefaultSchema"],
+        schemas["AdaptativeObject_CompleteSchema"],
+        models,
     )
     # Create Schemas for the Different ways of presenting Practice Tests
     schemas[
@@ -94,4 +114,5 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
 
     # Create a Schema for including a user and their role
     schemas["User_UserAndRoleSchema"] = create_user_and_role_schema(ma, schemas, models)
+
     return schemas

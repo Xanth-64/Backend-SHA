@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from typing import Dict
+
 from firebase_admin import App
 from flask import Blueprint, request
 from flask_marshmallow.schema import Schema
@@ -11,7 +13,7 @@ from src.services.utils.middleware.auth_middleware import auth_middleware
 
 def create_one_template_controller_factory(
     db: SQLAlchemy,
-    template_model: Model,
+    models: Dict[str, Model],
     template_schema: Schema,
     blueprint: Blueprint,
     expected_role: str = None,
@@ -30,14 +32,18 @@ def create_one_template_controller_factory(
         """
         req_data = request.get_json()
         relative_position = (
-            db.session.query(func.max(template_model.relative_position))
-            .filter(template_model.topic_id == req_data.get("topic_id"))
+            db.session.query(func.max(models["Template"].relative_position))
+            .filter(models["Template"].topic_id == req_data.get("topic_id"))
             .scalar()
         )
         relative_position = relative_position + 1 if relative_position else 1
-        new_instance = template_model(relative_position=relative_position, **req_data)
+        new_instance = models["Template"](
+            relative_position=relative_position, **req_data
+        )
+        template_adaptative_object = models["AdaptativeObject"](template=new_instance)
         try:
             db.session.add(new_instance)
+            db.session.add(template_adaptative_object)
             db.session.commit()
         except IntegrityError:
             return {

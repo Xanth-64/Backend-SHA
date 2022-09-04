@@ -8,7 +8,7 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from src.services.utils.controllers.delete_by_id_controller import (
+from src.services.utils.controllers.generics.delete_by_id_controller import (
     delete_by_id_controller_factory,
 )
 from src.services.utils.controllers.page.create_one_page import (
@@ -20,10 +20,10 @@ from src.services.utils.controllers.page.delete_one_page import (
 from src.services.utils.controllers.page.get_pages_for_template import (
     get_pages_for_template_factory,
 )
-from src.services.utils.controllers.get_by_id_controller import (
+from src.services.utils.controllers.generics.get_by_id_controller import (
     get_by_id_controller_factory,
 )
-from src.services.utils.controllers.update_by_id_controller import (
+from src.services.utils.controllers.generics.update_by_id_controller import (
     update_by_id_controller_factory,
 )
 from src.services.utils.controllers.page.switch_pages import (

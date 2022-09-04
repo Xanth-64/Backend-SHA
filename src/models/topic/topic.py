@@ -44,4 +44,8 @@ def create_model(db: SQLAlchemy):
             primaryjoin="TopicPrecedence.successor_id == Topic.id",
         )
 
+        adaptative_object_id = db.Column(
+            UUID(as_uuid=True), db.ForeignKey("adaptative_object.id"), nullable=False
+        )
+
     return Topic

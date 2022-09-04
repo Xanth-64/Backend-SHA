@@ -19,6 +19,9 @@ from typing import Dict
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import Model
+from src.models.adaptation_condition import adaptation_condition
+from src.models.adaptative_event import adaptative_event
+from src.models.adaptative_object import adaptative_object
 from src.models.answer_alternative import answer_alternative
 from src.models.interaction_fired import interaction_fired
 from src.models.learning_content import learning_content
@@ -40,6 +43,9 @@ from src.models.user import user
 def create_models(db: SQLAlchemy) -> Dict[str, Model]:
     """Function to Create all of the Models in the database"""
     model_dict = {
+        "AdaptationCondition": adaptation_condition.create_model(db),
+        "AdaptativeEvent": adaptative_event.create_model(db),
+        "AdaptativeObject": adaptative_object.create_model(db),
         "AnswerAlternative": answer_alternative.create_model(db),
         "InteractionFired": interaction_fired.create_model(db),
         "LearningContent": learning_content.create_model(db),

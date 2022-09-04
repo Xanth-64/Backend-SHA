@@ -47,6 +47,11 @@ def create_model(db: SQLAlchemy):
             uselist=False,
             cascade="all, delete-orphan",
         )
+
+        adaptative_object_id = db.Column(
+            UUID(as_uuid=True), db.ForeignKey("adaptative_object.id"), nullable=False
+        )
+
         UniqueConstraint(
             relative_position,
             template_id,

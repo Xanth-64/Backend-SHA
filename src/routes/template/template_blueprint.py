@@ -11,10 +11,10 @@ from flask_sqlalchemy import SQLAlchemy
 from src.services.utils.controllers.template.get_templates_for_topic import (
     get_templates_for_topic_factory,
 )
-from src.services.utils.controllers.get_by_id_controller import (
+from src.services.utils.controllers.generics.get_by_id_controller import (
     get_by_id_controller_factory,
 )
-from src.services.utils.controllers.update_by_id_controller import (
+from src.services.utils.controllers.generics.update_by_id_controller import (
     update_by_id_controller_factory,
 )
 from src.services.utils.controllers.template.create_one_template import (
@@ -45,7 +45,7 @@ def create_template_blueprint(
 
     create_one_template_controller_factory(
         db,
-        models["Template"],
+        models,
         schemas["Template_DefaultSchema"],
         blueprint,
         expected_role="teacher",

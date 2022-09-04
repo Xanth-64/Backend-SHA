@@ -8,14 +8,16 @@ Returns:
 from firebase_admin import App
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from src.services.utils.controllers.get_all_controller import get_all_controller_factory
-from src.services.utils.controllers.get_all_with_pagination_controller import (
+from src.services.utils.controllers.generics.get_all_controller import (
+    get_all_controller_factory,
+)
+from src.services.utils.controllers.generics.get_all_with_pagination_controller import (
     get_all_with_pagination_controller_factory,
 )
 from src.services.utils.controllers.topic_prelation.create_topic_prelations import (
     create_topic_prelations_controller_factory,
 )
-from src.services.utils.controllers.update_by_id_controller import (
+from src.services.utils.controllers.generics.update_by_id_controller import (
     update_by_id_controller_factory,
 )
 
