@@ -31,6 +31,7 @@ def create_model(db: SQLAlchemy):
         title = db.Column(db.String(255), unique=True, nullable=False)
         icon_name = db.Column(db.String(255), nullable=True)
         default_knowledge = db.Column(db.Integer(), default=50)
+        leak_parameter = db.Column(db.Float(), default=0.0)
 
         successors = db.relationship(
             "TopicPrecedence",
@@ -46,6 +47,14 @@ def create_model(db: SQLAlchemy):
 
         adaptative_object_id = db.Column(
             UUID(as_uuid=True), db.ForeignKey("adaptative_object.id"), nullable=False
+        )
+
+        templates = db.relationship(
+            "Template",
+            backref="topic",
+            lazy="dynamic",
+            uselist=True,
+            cascade="all, delete-orphan",
         )
 
     return Topic

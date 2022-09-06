@@ -78,6 +78,19 @@ def create_one_page_controller_factory(
                 new_instance.practice_test.test_questions.append(new_test_question)
                 total_score += new_test_question.question_score
             new_instance.practice_test.total_score = total_score
+            if practice_test.get("approval_score"):
+                new_instance.practice_test.approval_score = practice_test.get(
+                    "approval_score"
+                )
+                if practice_test.get("approval_score") > total_score:
+                    return {
+                        "success": False,
+                        "message": "approval_score cannot be greater than total_score",
+                        "data": {
+                            "error": "INVALID_APPROVAL_SCORE",
+                            "message": "approval_score cannot be greater than total_score",
+                        },
+                    }, 400
         page_adaptative_object = models["AdaptativeObject"](page=new_instance)
         try:
             db.session.add(new_instance)

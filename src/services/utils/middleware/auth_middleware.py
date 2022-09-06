@@ -59,7 +59,7 @@ def auth_middleware(
                 except ValueError:
                     return {
                         "success": False,
-                        "code": {"name": "BAD_AUTH_HEADER"},
+                        "code": {"name": "INVALID_AUTH_HEADER"},
                         "message": "Unauthorized",
                     }, 401
                 except (

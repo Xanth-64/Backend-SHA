@@ -11,11 +11,14 @@ from flask_sqlalchemy import SQLAlchemy
 from src.services.utils.controllers.adaptative_event.create_one_adaptative_event import (
     create_one_adaptative_event_factory,
 )
+from src.services.utils.controllers.adaptative_event.delete_one_adaptative_event import (
+    delete_one_adaptative_event_controller_factory,
+)
 from src.services.utils.controllers.adaptative_event.get_all_adaptative_events_by_adaptative_object import (
     get_all_adaptative_events_by_adaptative_object_controller_factory,
 )
-from src.services.utils.controllers.adaptative_event.delete_one_adaptative_event import (
-    delete_one_adaptative_event_controller_factory,
+from src.services.utils.controllers.adaptative_event.switch_adaptative_events import (
+    switch_adaptative_event_controller_factory,
 )
 
 
@@ -57,6 +60,15 @@ def create_adaptative_event_blueprint(
     get_all_adaptative_events_by_adaptative_object_controller_factory(
         models,
         schemas,
+        blueprint,
+        expected_role="teacher",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    switch_adaptative_event_controller_factory(
+        db,
+        models["AdaptativeEvent"],
+        schemas["AdaptativeEvent_CompleteSchema"],
         blueprint,
         expected_role="teacher",
         firebase_app=firebase_app,

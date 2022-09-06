@@ -23,9 +23,6 @@ from src.routes.adaptation_condition.adaptation_condition import (
 from src.routes.adaptative_event.adaptative_event import (
     create_adaptative_event_blueprint,
 )
-from src.routes.adaptative_object.adaptative_object import (
-    create_adaptative_object_blueprint,
-)
 from src.routes.answer_alternative.answer_alternative_blueprint import (
     create_answer_alternative_blueprint,
 )
@@ -77,9 +74,6 @@ def create_blueprints(
     )
     app.register_blueprint(
         blueprint=create_adaptative_event_blueprint(db, models, schemas, firebase_app)
-    )
-    app.register_blueprint(
-        blueprint=create_adaptative_object_blueprint(db, models, schemas, firebase_app)
     )
     app.register_blueprint(
         blueprint=create_answer_alternative_blueprint(db, models, schemas, firebase_app)

@@ -23,6 +23,9 @@ from src.services.utils.controllers.template.create_one_template import (
 from src.services.utils.controllers.template.switch_templates import (
     switch_template_controller_factory,
 )
+from src.services.utils.controllers.template.get_triggered_adaptative_events_for_template import (
+    get_triggered_adaptative_events_by_template_controller_factory,
+)
 
 
 def create_template_blueprint(
@@ -42,7 +45,9 @@ def create_template_blueprint(
     blueprint = Blueprint(
         name="/templates", import_name=__name__, url_prefix="/templates"
     )
-
+    sub_blueprint = Blueprint(
+        name="/adaptative_events", import_name=__name__, url_prefix="/adaptative_events"
+    )
     create_one_template_controller_factory(
         db,
         models,
@@ -86,4 +91,13 @@ def create_template_blueprint(
         firebase_app=firebase_app,
         user_model=models["User"],
     )
+    get_triggered_adaptative_events_by_template_controller_factory(
+        models,
+        schemas,
+        sub_blueprint,
+        expected_role="student",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    blueprint.register_blueprint(sub_blueprint)
     return blueprint
