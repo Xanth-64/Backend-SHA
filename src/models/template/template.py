@@ -37,6 +37,8 @@ def create_model(db: SQLAlchemy):
 
         knowledge_weight = db.Column(db.Integer(), nullable=False, default=100)
 
+        leak_parameter = db.Column(db.Float(), default=0.0)
+
         topic_id = db.Column(
             UUID(as_uuid=True), db.ForeignKey("topic.id"), nullable=False
         )
@@ -47,6 +49,10 @@ def create_model(db: SQLAlchemy):
             lazy=True,
             uselist=True,
             cascade="all, delete-orphan",
+        )
+
+        adaptative_object_id = db.Column(
+            UUID(as_uuid=True), db.ForeignKey("adaptative_object.id"), nullable=False
         )
 
         UniqueConstraint(

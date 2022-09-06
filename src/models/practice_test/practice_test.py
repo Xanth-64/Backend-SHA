@@ -29,12 +29,12 @@ def create_model(db: SQLAlchemy):
 
         title = db.Column(db.String(255), unique=True, nullable=False)
         show_on_init = db.Column(db.Boolean, default=False)
-
+        adaptation_weight = db.Column(db.Integer, default=50)
+        approval_score = db.Column(db.Integer, nullable=False)
         page_id = db.Column(
             UUID(as_uuid=True), db.ForeignKey("page.id"), nullable=False
         )
         total_score = db.Column(db.Integer, nullable=False)
-
         test_questions = db.relationship(
             "TestQuestion",
             backref="practice_test",

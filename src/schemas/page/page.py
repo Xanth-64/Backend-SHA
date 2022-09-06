@@ -19,5 +19,6 @@ def create_page_inheritance_schema(
         template_id = ma.auto_field()
         learning_content = ma.Nested(schemas["LearningContent_DefaultSchema"])
         practice_test = ma.Nested(schemas["PracticeTest_WithoutAnswers"])
+        adaptative_object_id = ma.auto_field()
 
     return PageInheritanceSchema

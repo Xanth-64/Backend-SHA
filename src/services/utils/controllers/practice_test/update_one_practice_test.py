@@ -66,14 +66,27 @@ def update_one_practice_test_controller_factory(
                     question_prompt=test_question.get("question_prompt"),
                     relative_position=i,
                     question_score=test_question.get("question_score"),
+                    question_hint=test_question.get("question_hint"),
                 )
                 for answer_alternative in test_question.get("answer_alternatives"):
                     new_test_question.answer_alternatives.append(
                         models["AnswerAlternative"](**answer_alternative)
                     )
+                new_test_question.adaptative_object = models["AdaptativeObject"]()
                 old_data.test_questions.append(new_test_question)
                 total_score += new_test_question.question_score
             old_data.total_score = total_score
+            if req_data.get("approval_score"):
+                old_data.approval_score = req_data.get("approval_score")
+                if req_data.get("approval_score") > old_data.total_score:
+                    return {
+                        "success": False,
+                        "message": "approval_score cannot be greater than total_score",
+                        "data": {
+                            "error": "INVALID_APPROVAL_SCORE",
+                            "message": "approval_score cannot be greater than total_score",
+                        },
+                    }, 400
         try:
             db.session.commit()
 

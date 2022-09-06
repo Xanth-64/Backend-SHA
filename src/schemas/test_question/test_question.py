@@ -7,7 +7,10 @@ from flask_sqlalchemy.model import Model
 
 
 def create_test_question_inheritance_schema(
-    ma: Marshmallow, answer_alternative_schema: Schema, models: Dict[str, Model]
+    ma: Marshmallow,
+    answer_alternative_schema: Schema,
+    adaptative_object_schema: Schema,
+    models: Dict[str, Model],
 ) -> Schema:
     class TestQuestionInheritanceSchema(ma.SQLAlchemySchema):
         class Meta:
@@ -20,6 +23,8 @@ def create_test_question_inheritance_schema(
         relative_position = ma.auto_field()
         question_score = ma.auto_field()
         practice_test_id = ma.auto_field()
+        question_hint = ma.auto_field()
         answer_alternatives = ma.Nested(answer_alternative_schema, many=True)
+        adaptative_object = ma.Nested(adaptative_object_schema)
 
     return TestQuestionInheritanceSchema
