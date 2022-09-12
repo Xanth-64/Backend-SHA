@@ -26,5 +26,6 @@ def create_test_question_inheritance_schema(
         question_hint = ma.auto_field()
         answer_alternatives = ma.Nested(answer_alternative_schema, many=True)
         adaptative_object = ma.Nested(adaptative_object_schema)
+        adaptative_object_id = ma.auto_field()
 
     return TestQuestionInheritanceSchema
