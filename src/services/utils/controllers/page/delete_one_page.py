@@ -58,7 +58,12 @@ def delete_one_page_controller_factory(
             }, 200
         # Reduce by 1 the relative_position of the following elements
         for element in (
-            model().query.filter(model.relative_position > data.relative_position).all()
+            model()
+            .query.filter(
+                model.template_id == data.template_id,
+                model.relative_position > data.relative_position,
+            )
+            .all()
         ):
             element.relative_position -= 1
         db.session.delete(data)

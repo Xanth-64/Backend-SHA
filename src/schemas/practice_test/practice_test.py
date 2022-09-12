@@ -9,6 +9,7 @@ from flask_sqlalchemy.model import Model
 def create_test_with_answer_alternatives_schema(
     ma: Marshmallow,
     test_question_schema,
+    schemas: Dict[str, Schema],
     models: Dict[str, Model],
 ) -> Schema:
     class TestWithAnswersSchema(ma.SQLAlchemySchema):
@@ -22,6 +23,8 @@ def create_test_with_answer_alternatives_schema(
         total_score = ma.auto_field()
         page_id = ma.auto_field()
         approval_score = ma.auto_field()
+        adaptation_weight = ma.auto_field()
         test_questions = ma.Nested(test_question_schema, many=True)
+        page = ma.Nested(schemas["Page_DefaultSchema"], many=False)
 
     return TestWithAnswersSchema

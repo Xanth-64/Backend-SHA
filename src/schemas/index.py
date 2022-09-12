@@ -19,6 +19,9 @@ from src.schemas.adaptative_object.adaptative_object import (
 from src.schemas.answer_alternative.answer_alternative import (
     create_answer_alternative_student_schema,
 )
+from src.schemas.learning_content.learning_content import (
+    create_learning_content_with_page_schema,
+)
 from src.schemas.practice_test.practice_test import (
     create_test_with_answer_alternatives_schema,
 )
@@ -89,15 +92,19 @@ def create_schemas(ma: Marshmallow, models: Dict[str, Model]) -> Dict[str, Schem
     schemas[
         "PracticeTest_WithoutAnswers"
     ] = create_test_with_answer_alternatives_schema(
-        ma, schemas["TestQuestion_WithoutAnswersSchema"], models
+        ma, schemas["TestQuestion_WithoutAnswersSchema"], schemas, models
     )
     schemas["PracticeTest_WithAnswers"] = create_test_with_answer_alternatives_schema(
-        ma, schemas["TestQuestion_WithAnswersSchema"], models
+        ma, schemas["TestQuestion_WithAnswersSchema"], schemas, models
     )
     # Create a Schema for Page Inheritance (Containing all of the Properties in the Models Child Classes)
     schemas["Page_PageInheritanceSchema"] = create_page_inheritance_schema(
         ma, schemas, models
     )
+    # Create a Schema for Learning Content
+    schemas[
+        "LearningContent_WithPageSchema"
+    ] = create_learning_content_with_page_schema(ma, schemas, models)
     # Create a Schema for Topic Precedence
     schemas[
         "TopicPrecedence_TopicPrecedenceRelationSchema"

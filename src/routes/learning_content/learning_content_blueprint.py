@@ -58,7 +58,7 @@ def create_learning_content_blueprint(
     )
     get_by_id_controller_factory(
         models["LearningContent"],
-        schemas["LearningContent_DefaultSchema"],
+        schemas["LearningContent_WithPageSchema"],
         blueprint,
         expected_role="student",
         firebase_app=firebase_app,
