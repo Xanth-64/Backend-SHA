@@ -40,26 +40,29 @@ def get_all_with_pagination_controller_factory(
     )
     def get_all_with_pagination_controller(current_user=None):
         args = request.args
+        # Sort only if "sort_key" parameter is present.
         if args.get("sort_key"):
-            data = (
-                model()
-                .query.order_by(args.get("sort_key"))
-                .paginate(
-                    page=int(args.get("page")), per_page=int(args.get("page_size"))
-                )
-            )
+            data = model().query.order_by(args.get("sort_key"))
         else:
-            data = model().query.paginate(
+            data = model().query
+
+        # Paginate only if pagination parameters are present
+        if args.get("page") and args.get("page_size"):
+            data = data.paginate(
                 page=int(args.get("page")), per_page=int(args.get("page_size"))
             )
+        else:
+            data = data.all()
         return {
             "message": "Model Bulk Data Found Successfully",
             "data": {
-                "total_pages": data.pages,
-                "total_items": data.total,
-                "current_page": data.page,
-                "page_size": data.per_page,
-                "items": schema().dump(obj=data.items, many=True),
+                "total_pages": data.pages if args.get("page") else 1,
+                "total_items": data.total if args.get("page") else len(data),
+                "current_page": data.page if args.get("page") else 1,
+                "page_size": data.per_page if args.get("page") else len(data),
+                "items": schema().dump(
+                    obj=data.items if args.get("page") else data, many=True
+                ),
             },
             "success": True,
         }, 200
