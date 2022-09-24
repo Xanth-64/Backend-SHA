@@ -1,14 +1,15 @@
 image:
-    file: .gitpod.Dockerfile
+  file: .gitpod.Dockerfile
 
 tasks:
   - init: |
+      npm install -g dbgate-serve
       poetry install
-      poetry run pre-commit install
 
   - command: |
-      poetry run python wsgi.py -d
-
+      poetry run pre-commit install
+      pg_start
+      poetry run flask run
 github:
   prebuilds:
     # enable for the default branch (defaults to true)
