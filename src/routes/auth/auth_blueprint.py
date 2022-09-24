@@ -160,6 +160,41 @@ def create_auth_blueprint(
             "message": "Password Changed Successfully",
         }, 200
 
+    @blueprint.route("/refresh", methods=["POST"])
+    def refresh_with_token():
+        req_data = request.get_json()
+        if not req_data.get("refreshToken"):
+            return {
+                "success": False,
+                "data": {
+                    "error": "MISSING_REFRESH_TOKEN",
+                    "message": "Missing Refresh Token",
+                },
+                "message": "Missing Refresh Token",
+            }, 400
+        token = requests.post(
+            "https://securetoken.googleapis.com/v1/token",
+            params={"key": environ.get("GOOGLE_API_KEY")},
+            data={
+                "grant_type": "refresh_token",
+                "refresh_token": req_data.get("refreshToken"),
+            },
+        )
+        if token.status_code != 200:
+            return {
+                "success": False,
+                "data": {
+                    "error": "INVALID_REFRESH_TOKEN",
+                    "message": "Invalid Refresh Token",
+                },
+                "message": "Invalid Refresh Token",
+            }, 400
+        return {
+            "success": True,
+            "data": token.json(),
+            "message": "Token Refreshed Successfully",
+        }
+
     update_current_user_controller_factory(
         db,
         models["User"],

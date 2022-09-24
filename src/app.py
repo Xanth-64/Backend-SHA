@@ -65,8 +65,8 @@ def create_app():
     # Database Model Instantiation
     models = create_models(db)
     # HACK This way of creating models is not correct. Change to migrations approach.
-    db.drop_all()
-    db.create_all()
+    # db.drop_all()
+    # db.create_all()
 
     # API Schema Instantiation
     schemas = create_schemas(ma=ma, models=models)

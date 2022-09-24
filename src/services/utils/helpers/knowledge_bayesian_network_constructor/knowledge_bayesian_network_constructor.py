@@ -37,7 +37,7 @@ def knowledge_bayesian_network_constructor(
             topic.id,
             **{
                 "default_knowledge": topic.default_knowledge,
-                "leak_parameter": topic.leak_parameter,
+                "leak_parameter": topic.leak_parameter / 100,
                 "entity_type": "topic",
             }
         )
@@ -48,8 +48,8 @@ def knowledge_bayesian_network_constructor(
     # Predecessor is the logical Effect.
     for relation in topic_precedence_relations:
         bayesian_network.add_edge(
-            relation.successor_id,
             relation.predecessor_id,
+            relation.successor_id,
             **{
                 "knowledge_weight": relation.knowledge_weight,
             }
@@ -67,7 +67,7 @@ def knowledge_bayesian_network_constructor(
             template.id,
             **{
                 "default_knowledge": template.default_knowledge,
-                "leak_parameter": template.leak_parameter,
+                "leak_parameter": template.leak_parameter / 100,
                 "entity_type": "template",
             }
         )
@@ -200,7 +200,7 @@ def knowledge_bayesian_network_constructor(
                 expected_knowledge_modifier *= 1 - (
                     edges[(predecessor, template.id)] / 100
                 )
-        expected_knowledge_modifier *= 1 - template.leak_parameter
+        expected_knowledge_modifier *= 1 - template.leak_parameter / 100
         expected_knowledge -= expected_knowledge_modifier
 
         # Now we set the node's expected_knowledge attribute.
@@ -224,13 +224,13 @@ def knowledge_bayesian_network_constructor(
     for topic in domain_model_topics:
         # We add the topic to the list of topics to be updated
         # if the topic has no successors.
-        if not topic.successors:
+        if not topic.predecessors:
             topics_to_update.append(topic)
     # print("Initial Topic to Update", topics_to_update)
     # Now we iterate until we have no more topics to update.
     while topics_to_update:
         topic_to_update = topics_to_update.pop(0)
-        # print("Updating Topic", topic_to_update.id)
+        print("Updating Topic", topic_to_update.id)
         # We get the topic's predecessors.
         predecessors = bayesian_network.predecessors(topic_to_update.id)
 
@@ -249,9 +249,8 @@ def knowledge_bayesian_network_constructor(
                 expected_knowledge_modifier *= 1 - (
                     edges[(predecessor, topic_to_update.id)] / 100
                 )
-        expected_knowledge_modifier *= 1 - topic_to_update.leak_parameter
+        expected_knowledge_modifier *= 1 - topic_to_update.leak_parameter / 100
         expected_knowledge -= expected_knowledge_modifier
-
         # Now we set the node's expected_knowledge attribute.
         bayesian_network.nodes[topic_to_update.id][
             "expected_knowledge"
@@ -269,7 +268,10 @@ def knowledge_bayesian_network_constructor(
         for successor in bayesian_network.successors(topic_to_update.id):
             add_successor = True
             for predecessor in bayesian_network.predecessors(successor):
-                if not bayesian_network.nodes[predecessor].get("expected_knowledge"):
+                if (
+                    bayesian_network.nodes[predecessor].get("expected_knowledge")
+                    is None
+                ):
                     add_successor = False
                     break
             if add_successor:
