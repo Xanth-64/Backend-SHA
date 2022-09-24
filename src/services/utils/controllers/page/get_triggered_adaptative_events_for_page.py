@@ -99,7 +99,7 @@ def get_triggered_adaptative_events_by_page_controller_factory(
                 elif condition.variable_to_compare == "LEARNING_STYLE_VISUAL_AFFINITY":
                     variable_to_compare = learning_styles_values["VISUAL"]
                 elif condition.variable_to_compare == "LEARNING_STYLE_READING_AFFINITY":
-                    variable_to_compare = learning_styles_values["READING"]
+                    variable_to_compare = learning_styles_values["TEXTUAL"]
                 elif (
                     condition.variable_to_compare
                     == "LEARNING_STYLE_KINESTHETIC_AFFINITY"

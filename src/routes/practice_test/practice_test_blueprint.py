@@ -81,7 +81,7 @@ def create_practice_test_blueprint(
     )
     get_by_id_controller_factory(
         models["PracticeTest"],
-        schemas["PracticeTest_WithoutAnswers"],
+        schemas["PracticeTest_WithAnswers"],
         sub_blueprints["student"],
         expected_role="student",
         firebase_app=firebase_app,
