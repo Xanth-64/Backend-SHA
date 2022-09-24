@@ -1,0 +1,1 @@
+requirements.txt: poetry export --without-hashes > $@
