@@ -15,6 +15,7 @@ from flasgger import Swagger
 from flask import Flask
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
 
@@ -62,11 +63,13 @@ def create_app():
     )
     db = SQLAlchemy(app)
     ma = Marshmallow(app)
+
+    # Migrate Configuration Params
+    migrate = Migrate(app, db)
+
     # Database Model Instantiation
     models = create_models(db)
     # HACK This way of creating models is not correct. Change to migrations approach.
-    db.drop_all()
-    db.create_all()
 
     # API Schema Instantiation
     schemas = create_schemas(ma=ma, models=models)
@@ -122,4 +125,5 @@ def create_app():
         }, 500
 
     db.init_app(app)
+    migrate.init_app(app)
     return app

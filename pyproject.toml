@@ -22,6 +22,7 @@ pre-commit = "^2.19.0"
 Flask-Cors = "^3.0.10"
 firebase-admin = "^5.2.0"
 Python-EasyGraph = "^0.2a39"
+Flask-Migrate = "^3.1.0"
 
 [tool.poetry.dev-dependencies]
 watchdog = "^2.1.9"
