@@ -7,6 +7,7 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from src.models.index import create_models
 from src.schemas.index import create_schemas
+from src.app import create_app
 
 
 def pytest_addoption(parser):
@@ -27,6 +28,11 @@ def api_v1_host(host):
 @pytest.fixture(scope="session")
 def app():
     return Flask(__name__)
+
+
+@pytest.fixture(scope="session")
+def server_app():
+    return create_app()
 
 
 @pytest.fixture(scope="session")
