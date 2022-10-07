@@ -20,11 +20,11 @@ from src.services.utils.controllers.generics.get_by_id_controller import (
 from src.services.utils.controllers.practice_test.update_one_practice_test import (
     update_one_practice_test_controller_factory,
 )
-from src.services.utils.controllers.generics.update_by_id_controller import (
-    update_by_id_controller_factory,
-)
 from src.services.utils.controllers.generics.get_all_with_pagination_controller import (
     get_all_with_pagination_controller_factory,
+)
+from src.services.utils.controllers.practice_test.get_all_starting_tests import (
+    get_all_starting_tests_controller_factory,
 )
 
 
@@ -51,6 +51,9 @@ def create_practice_test_blueprint(
         ),
         "student": Blueprint(
             name="/student", import_name=__name__, url_prefix="/student"
+        ),
+        "generic": Blueprint(
+            name="/generic", import_name=__name__, url_prefix="/generic"
         ),
     }
     create_one_controller_factory(
@@ -100,6 +103,14 @@ def create_practice_test_blueprint(
         models["PracticeTest"],
         schemas["PracticeTest_DefaultSchema"],
         blueprint,
+        expected_role="student",
+        firebase_app=firebase_app,
+        user_model=models["User"],
+    )
+    get_all_starting_tests_controller_factory(
+        models,
+        schemas,
+        sub_blueprints["generic"],
         expected_role="student",
         firebase_app=firebase_app,
         user_model=models["User"],

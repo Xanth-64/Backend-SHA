@@ -22,6 +22,7 @@ pre-commit = "^2.19.0"
 Flask-Cors = "^3.0.10"
 firebase-admin = "^5.2.0"
 Python-EasyGraph = "^0.2a39"
+Flask-Migrate = "^3.1.0"
 
 [tool.poetry.dev-dependencies]
 watchdog = "^2.1.9"
@@ -30,6 +31,8 @@ pre-commit = "^2.19.0"
 pylint = "^2.14.3"
 pytest = "^7.1.2"
 requests = "^2.28.0"
+pytest-xdist = "^2.5.0"
+pytest-cov = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
