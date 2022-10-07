@@ -1,3 +1,4 @@
+alembic==1.8.1; python_version >= "3.7"
 apispec==5.2.2; python_version >= "3.7"
 attrs==21.4.0; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.7"
 cachecontrol==0.12.11; python_version >= "3.6"
@@ -14,6 +15,7 @@ firebase-admin==5.2.0; python_version >= "3.6"
 flasgger==0.9.5
 flask-cors==3.0.10
 flask-marshmallow==0.14.0
+flask-migrate==3.1.0; python_version >= "3.6"
 flask-sqlalchemy==2.5.1; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
 flask==2.1.2; python_version >= "3.7"
 gensim==4.2.0; python_version >= "3.7" and python_version < "3.11"
@@ -33,13 +35,14 @@ grpcio==1.47.0; platform_python_implementation != "PyPy" and python_version >= "
 httplib2==0.20.4; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7"
 identify==2.5.1; python_version >= "3.7"
 idna==3.3; python_version >= "3.7" and python_version < "4" and platform_python_implementation != "PyPy"
-importlib-metadata==4.11.4; python_version < "3.10" and python_version >= "3.7" and (python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7")
+importlib-metadata==4.11.4; python_version < "3.9" and python_version >= "3.7" and (python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7")
 importlib-resources==5.8.0; python_version < "3.9" and python_version >= "3.7"
 itsdangerous==2.1.2; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7"
 jinja2==3.1.2; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7"
 joblib==1.1.0; python_version >= "3.8" and python_version < "3.11"
 jsonschema==4.6.0; python_version >= "3.7"
 kiwisolver==1.4.4; python_version >= "3.7" and python_version < "3.11"
+mako==1.2.3; python_version >= "3.7"
 markupsafe==2.1.1; python_version >= "3.7"
 marshmallow-sqlalchemy==0.28.0; python_version >= "3.7"
 marshmallow==3.16.0; python_version >= "3.7"
